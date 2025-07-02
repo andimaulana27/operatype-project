@@ -29,7 +29,7 @@ const Footer = () => {
                 Crafting high quality fonts with passion and precision.
               </p>
             </div>
-            <div className="pt-4 mt-8">s
+            <div className="pt-4 mt-8">
               <h5 className="font-medium mb-3 text-[18px] text-[#C8705C]">Secure Payments</h5>
               <Image
                 src="/icons/Paypal.svg"
