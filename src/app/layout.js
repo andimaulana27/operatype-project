@@ -1,9 +1,15 @@
-import { Inter } from "next/font/google";
+// src/app/layout.js
+
+import { Poppins } from "next/font/google"; // 1. Impor Poppins
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer"; // PASTIKAN INI AKTIF
+import Footer from "@/components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+// 2. Konfigurasi font Poppins dengan weight yang kita butuhkan
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "500"], // 300 untuk Light, 500 untuk Medium
+});
 
 export const metadata = {
   title: "Operatype.co - Premium Script Fonts",
@@ -13,10 +19,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      {/* 3. Terapkan class font ke body */}
+      <body className={`${poppins.className} bg-[#f9f9f9]`}>
         <Navbar />
         <main>{children}</main>
-        <Footer /> {/* PASTIKAN INI JUGA AKTIF */}
+        <Footer />
       </body>
     </html>
   );

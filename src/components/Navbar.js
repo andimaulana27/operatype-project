@@ -1,12 +1,15 @@
 // src/components/Navbar.js
+"use client";
 
 import Link from 'next/link';
 import Image from 'next/image';
-import Button from './Button';
-import CartIcon from '@/../public/icons/cart.svg';
-import UserIcon from '@/../public/icons/user.svg';
+import CartIcon from './icons/CartIcon';
+import UserIcon from './icons/UserIcon';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
+  const pathname = usePathname();
+
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'All Fonts', href: '/fonts' },
@@ -17,42 +20,62 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="bg-white border-b sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+    <header className="bg-[#f9f9f9] sticky top-0 z-50">
+      <div className="container mx-auto max-w-[1748px] border-b border-[#3F3F3F]">
+        <div className="flex justify-between items-center h-20 px-15">
           
-          {/* Kolom Kiri: Logo */}
-          <Link href="/">
-            <Image 
-              src="/logo.svg" 
-              alt="Operatype.co Logo" 
-              width={150} 
-              height={40} 
+          <Link href="/" aria-label="Back to Homepage">
+            <Image
+              src="/logo.svg"
+              alt="Operatype.co Logo"
+              width={143}
+              height={60}
+              priority
             />
           </Link>
 
-          {/* Kolom Tengah: Menu Navigasi dengan Animasi */}
-          <nav className="hidden md:flex space-x-6"> {/* Spasi sedikit dikurangi */}
-            {navLinks.map((link) => (
-              <Link key={link.name} href={link.href} className="group relative text-gray-600 hover:text-[#C8705C] transition-colors duration-300">
-                {link.name}
-                <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-[#C8705C] group-hover:w-full transition-all duration-350 ease-in"></span>
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link 
+                  key={link.name} 
+                  href={link.href} 
+                  className={`
+                    group relative py-2 transition-colors duration-[450ms] ease-in text-[16px]
+                    ${isActive 
+                      ? 'font-medium text-[#C8705C]' 
+                      : 'font-light text-[#9C9C9C] hover:text-[#3F3F3F] hover:font-medium'
+                    }
+                  `}
+                >
+                  {link.name}
+                  <span 
+                    className={`
+                      absolute left-0 -bottom-1 block h-0.5 bg-[#C8705C] transition-all duration-[450ms] ease-in
+                      ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}
+                    `} // <-- KEMBALI KE VERSI INI
+                  ></span>
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Kolom Kanan: Tombol & Ikon */}
-          <div className="flex items-center space-x-4">
-            <Button href="/login" variant="secondary">Login</Button>
-            <Button href="/register" variant="primary">Register</Button>
-            <Link href="/cart" className="text-gray-600 hover:text-[#C8705C]">
-              <CartIcon className="w-6 h-6" />
+          <div className="hidden md:flex items-center space-x-5">
+            <Link href="/cart" aria-label="Shopping Cart" className="text-[#3F3F3F] hover:text-[#C8705C] transition-colors">
+              <CartIcon className="w-[26px] h-[26px]" />
             </Link>
-            <Link href="/account" className="text-gray-600 hover:text-[#C8705C]">
-              <UserIcon className="w-6 h-6" />
+            
+            <div className="h-6 w-px bg-[#C8705C]"></div>
+
+            <Link href="/login" aria-label="Login or a personal account" className="text-[#3F3F3F] hover:text-[#C8705C] transition-colors">
+              <UserIcon className="w-[26px] h-[26px]" />
             </Link>
           </div>
 
+          <div className="md:hidden">
+             {/* Placeholder untuk Hamburger Menu */}
+          </div>
         </div>
       </div>
     </header>
