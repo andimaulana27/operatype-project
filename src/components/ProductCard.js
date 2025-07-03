@@ -2,7 +2,8 @@
 import Image from "next/image";
 import Button from "./Button";
 
-const ProductCard = ({ fontName, description, price, imageUrl, tagText }) => {
+// 1. Tambahkan 'slug' di sini untuk menerima data link
+const ProductCard = ({ fontName, description, price, imageUrl, tagText, slug }) => {
   return (
     <div className="group rounded-[15px] p-4 hover:-translate-y-2 transition-transform duration-300 ease-in-out w-full">
       
@@ -17,9 +18,6 @@ const ProductCard = ({ fontName, description, price, imageUrl, tagText }) => {
       </div>
 
       <div className="mt-4 px-1">
-        {/* ========================================================== */}
-        {/* PERUBAHAN UTAMA DI SINI                                    */}
-        {/* ========================================================== */}
         <div className="flex justify-between items-center">
           <h3 className="font-medium text-[22px] text-[#3F3F3F]">{fontName}</h3>
           {tagText && (
@@ -32,7 +30,8 @@ const ProductCard = ({ fontName, description, price, imageUrl, tagText }) => {
         <p className="font-light text-[18px] text-gray-500 mt-1">{description}</p>
         
         <div className="mt-4 flex justify-between items-center">
-          <Button href="#" variant="primary" className="w-[123px] h-[32px] text-[12px] flex items-center justify-center">
+          {/* 2. Perbarui 'href' pada tombol ini */}
+          <Button href={`/font/${slug || 'sample-font'}`} variant="primary" className="w-[123px] h-[32px] text-[12px] flex items-center justify-center">
             View Detail
           </Button>
           <p className="font-medium text-[24px] text-[#C8705C]">{price}</p>
@@ -40,6 +39,6 @@ const ProductCard = ({ fontName, description, price, imageUrl, tagText }) => {
       </div>
     </div>
   );
-};  
+};
 
 export default ProductCard;

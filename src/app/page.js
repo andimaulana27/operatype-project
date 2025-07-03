@@ -216,11 +216,14 @@ export default function Home() {
               </div>
 
             </div>
-            <div className="grid grid-cols-2 gap-0">
-              <Image src="/license-mockup-1.jpg" alt="License example 1" width={400} height={400} className="rounded-tl-2xl object-cover" />
-              <Image src="/license-mockup-2.jpg" alt="License example 2" width={400} height={400} className="rounded-tr-2xl object-cover" />
-              <Image src="/license-mockup-3.jpg" alt="License example 3" width={400} height={400} className="rounded-bl-2xl object-cover" />
-              <Image src="/license-mockup-4.jpg" alt="License example 4" width={400} height={400} className="rounded-br-2xl object-cover" />
+            <div>
+              <Image 
+                src="/license-composite.jpg" // Ganti nama file jika perlu
+                alt="License mockup collage" 
+                width={809} 
+                height={535} 
+                className="rounded-2xl object-cover" 
+              />
             </div>
           </div>
         </div>
