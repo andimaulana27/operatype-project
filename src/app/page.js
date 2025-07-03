@@ -133,7 +133,7 @@ export default function Home() {
             <h2 className="text-[38px] font-medium text-[#3F3F3F]">Curated Selections</h2>
             <div className="w-[103px] h-1 bg-[#C8705C] mx-auto my-6"></div>
             <p className="text-[18px] font-light text-gray-500 max-w-2xl mx-auto">
-              Our community&apos;s most loved bestsellers. {/* PERBAIKAN DI SINI */}
+              Our community&apos;s most loved bestsellers.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 place-items-center">
@@ -204,17 +204,19 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              {/* PERUBAHAN FINAL PADA TOMBOL DI SINI */}
-              <div className="mt-10 flex gap-x-2"> {/* Changed grid to flex and reduced gap-x */}
-                <Button href="/license" variant="primary" className="w-[250px] h-[48px] text-[16px] flex items-center justify-center"> {/* Adjusted width and added padding */}
+              
+              {/* === KODE TOMBOL FINAL SESUAI PERMINTAAN ANDA === */}
+              <div className="mt-10 flex gap-x-2">
+                <Button href="/license" variant="primary" className="w-[250px] h-[48px] text-[16px] flex items-center justify-center">
                   Explore All Licenses
                 </Button>
-                <Button href="/contact" variant="secondary" className="w-[270px] h-[48px] text-[16px] flex items-center justify-center"> {/* Adjusted width and added padding */}
+                <Button href="/contact" variant="secondary" className="w-[270px] h-[48px] text-[16px] flex items-center justify-center">
                   Request a Custom License
                 </Button>
               </div>
+
             </div>
-            <div className="grid grid-cols-2">
+            <div className="grid grid-cols-2 gap-0">
               <Image src="/license-mockup-1.jpg" alt="License example 1" width={400} height={400} className="rounded-tl-2xl object-cover" />
               <Image src="/license-mockup-2.jpg" alt="License example 2" width={400} height={400} className="rounded-tr-2xl object-cover" />
               <Image src="/license-mockup-3.jpg" alt="License example 3" width={400} height={400} className="rounded-bl-2xl object-cover" />
