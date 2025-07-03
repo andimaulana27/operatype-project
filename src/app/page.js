@@ -125,7 +125,7 @@ export default function Home() {
             <h2 className="text-[38px] font-medium text-[#3F3F3F]">Curated Selections</h2>
             <div className="w-[103px] h-1 bg-[#C8705C] mx-auto my-6"></div>
             <p className="text-[18px] font-light text-gray-500 max-w-2xl mx-auto">
-              Our community's most loved bestsellers.
+              Our community&apos;s most loved bestsellers.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 place-items-center">
