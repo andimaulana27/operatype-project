@@ -11,11 +11,10 @@ const Footer = () => {
   return (
     <footer className="bg-[#f9f9f9] mt-24 font-light text-[18px] text-[#3F3F3F]">
       <div className="container mx-auto px-6 py-12 max-w-[1748px]">
-        {/* PERUBAHAN UTAMA: dari 'grid' menjadi 'flex' untuk distribusi yang rata */}
-        <div className="flex flex-col md:flex-row justify-between gap-x-8 gap-y-12">
+        <div className="flex flex-col md:flex-row flex-wrap justify-between gap-x-8 gap-y-12">
           
           {/* Kolom 1: Logo, Deskripsi, & Pembayaran */}
-          <div className="flex flex-col justify-between md:w-1/4">
+          <div className="flex flex-col justify-between w-full sm:w-auto md:w-1/4">
             <div>
               <Link href="/" aria-label="Back to Homepage">
                 <Image 
@@ -29,6 +28,9 @@ const Footer = () => {
                 Crafting high quality fonts with passion and precision.
               </p>
             </div>
+            {/* ========================================================== */}
+            {/* BAGIAN INI SUDAH DIPERBARUI SESUAI PERMINTAAN ANDA     */}
+            {/* ========================================================== */}
             <div className="pt-4 mt-8">
               <h5 className="font-medium mb-3 text-[18px] text-[#C8705C]">Secure Payments</h5>
               <Image
@@ -55,11 +57,11 @@ const Footer = () => {
           <div className="w-full sm:w-auto">
             <h4 className="font-medium text-[#C8705C] text-[22px] mb-12">Connect</h4>
             <div className="flex flex-col space-y-3">
-              <a href="#" className="inline-flex items-center group hover:text-[#C8705C]">
+              <a href="https://www.instagram.com/operatype.co/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center group hover:text-[#C8705C]">
                 <InstagramIcon className="w-5 h-5 text-gray-500 transition-colors group-hover:text-[#C8705C]" />
                 <span className="ml-3 transition-all group-hover:font-normal">Instagram</span>
               </a>
-              <a href="#" className="inline-flex items-center group hover:text-[#C8705C]">
+              <a href="https://www.behance.net/operatype" target="_blank" rel="noopener noreferrer" className="inline-flex items-center group hover:text-[#C8705C]">
                 <BehanceIcon className="w-5 h-5 text-gray-500 transition-colors group-hover:text-[#C8705C]" />
                 <span className="ml-3 transition-all group-hover:font-normal">Behance</span>
               </a>
@@ -67,7 +69,7 @@ const Footer = () => {
                 <DribbbleIcon className="w-5 h-5 text-gray-500 transition-colors group-hover:text-[#C8705C]" />
                 <span className="ml-3 transition-all group-hover:font-normal">Dribbble</span>
               </a>
-              <a href="#" className="inline-flex items-center group hover:text-[#C8705C]">
+              <a href="https://id.pinterest.com/operatype/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center group hover:text-[#C8705C]">
                 <PinterestIcon className="w-5 h-5 text-gray-500 transition-colors group-hover:text-[#C8705C]" />
                 <span className="ml-3 transition-all group-hover:font-normal">Pinterest</span>
               </a>

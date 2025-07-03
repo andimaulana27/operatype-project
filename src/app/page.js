@@ -45,6 +45,14 @@ export default function Home() {
     { title: 'Modern & Bold', href: '/fonts?category=modern', imageUrl: '/styles/style-modern.jpg' },
   ];
 
+  const instagramPosts = [
+    { src: '/instagram/post-1.jpg', alt: 'Instagram Post 1' },
+    { src: '/instagram/post-2.jpg', alt: 'Instagram Post 2' },
+    { src: '/instagram/post-3.jpg', alt: 'Instagram Post 3' },
+    { src: '/instagram/post-4.jpg', alt: 'Instagram Post 4' },
+    { src: '/instagram/post-5.jpg', alt: 'Instagram Post 5' },
+  ];
+
   return (
     <>
       {/* HERO SECTION - TEKS */}
@@ -125,7 +133,7 @@ export default function Home() {
             <h2 className="text-[38px] font-medium text-[#3F3F3F]">Curated Selections</h2>
             <div className="w-[103px] h-1 bg-[#C8705C] mx-auto my-6"></div>
             <p className="text-[18px] font-light text-gray-500 max-w-2xl mx-auto">
-              Our community&apos;s most loved bestsellers.
+              Our community's most loved bestsellers.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 place-items-center">
@@ -196,21 +204,53 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="mt-10 flex items-center gap-x-4">
-                <Button href="/license" variant="primary" className="h-[42px] text-[12px] flex items-center justify-center">
+              {/* PERUBAHAN FINAL PADA TOMBOL DI SINI */}
+              <div className="mt-10 flex gap-x-2"> {/* Changed grid to flex and reduced gap-x */}
+                <Button href="/license" variant="primary" className="w-[250px] h-[48px] text-[16px] flex items-center justify-center"> {/* Adjusted width and added padding */}
                   Explore All Licenses
                 </Button>
-                <Button href="/contact" variant="secondary" className="h-[42px] text-[12px] flex items-center justify-center">
+                <Button href="/contact" variant="secondary" className="w-[270px] h-[48px] text-[16px] flex items-center justify-center"> {/* Adjusted width and added padding */}
                   Request a Custom License
                 </Button>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Image src="/license-mockup-1.jpg" alt="License example 1" width={400} height={400} className="rounded-2xl object-cover" />
-              <Image src="/license-mockup-2.jpg" alt="License example 2" width={400} height={400} className="rounded-2xl object-cover" />
-              <Image src="/license-mockup-3.jpg" alt="License example 3" width={400} height={400} className="rounded-2xl object-cover" />
-              <Image src="/license-mockup-4.jpg" alt="License example 4" width={400} height={400} className="rounded-2xl object-cover" />
+            <div className="grid grid-cols-2">
+              <Image src="/license-mockup-1.jpg" alt="License example 1" width={400} height={400} className="rounded-tl-2xl object-cover" />
+              <Image src="/license-mockup-2.jpg" alt="License example 2" width={400} height={400} className="rounded-tr-2xl object-cover" />
+              <Image src="/license-mockup-3.jpg" alt="License example 3" width={400} height={400} className="rounded-bl-2xl object-cover" />
+              <Image src="/license-mockup-4.jpg" alt="License example 4" width={400} height={400} className="rounded-br-2xl object-cover" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* INSTAGRAM SECTION */}
+      <section className="w-full bg-white py-20">
+        <div className="container mx-auto max-w-[1748px] px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-[38px] font-medium text-[#3F3F3F]">Join Our Creative Community</h2>
+            <div className="w-[103px] h-1 bg-[#C8705C] mx-auto my-6"></div>
+            <p className="text-[18px] font-light text-gray-500 max-w-2xl mx-auto">
+              Follow us @operatype.co on Instagram for daily design inspiration, new font previews, and behind-the-scenes.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            {instagramPosts.map((post) => (
+              <a href="https://www.instagram.com/operatype.co/" target="_blank" rel="noopener noreferrer" key={post.src} className="block overflow-hidden rounded-2xl group">
+                <Image 
+                  src={post.src} 
+                  alt={post.alt}
+                  width={300}
+                  height={300}
+                  className="w-full aspect-square object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+                />
+              </a>
+            ))}
+          </div>
+          <div className="mt-16 flex justify-center">
+            <Button href="https://www.instagram.com/operatype.co/" variant="primary" className="w-[233px] h-[54px] text-[18px] font-medium flex items-center justify-center">
+              Follow on Instagram
+            </Button>
           </div>
         </div>
       </section>

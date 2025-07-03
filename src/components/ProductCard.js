@@ -40,6 +40,6 @@ const ProductCard = ({ fontName, description, price, imageUrl, tagText }) => {
       </div>
     </div>
   );
-};
+};  
 
 export default ProductCard;
