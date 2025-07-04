@@ -25,3 +25,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f9f9f9;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Untuk Chrome, Safari, dan Opera */
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Untuk IE dan Edge */
+  scrollbar-width: none;  /* Untuk Firefox */
+}

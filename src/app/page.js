@@ -4,7 +4,7 @@
 import Button from "@/components/Button";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules'; 
 import ProductCard from "@/components/ProductCard";
 import StyleCard from "@/components/StyleCard";
 import ChecklistIcon from "@/components/icons/ChecklistIcon";
@@ -77,11 +77,15 @@ export default function Home() {
       {/* HERO SECTION - CAROUSEL */}
       <section className="w-full mt-16 h-[605px]">
         <Swiper
-          modules={[Autoplay, Navigation]}
-          navigation
+          // PERUBAHAN DI SINI: 'Navigation' dihapus dari modules
+          modules={[Autoplay]} 
           loop={true}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
           className="w-full h-full"
+          // PERUBAHAN DI SINI: Properti 'navigation' dihapus
         >
           {carouselImages.map((src, index) => (
             <SwiperSlide key={index}>

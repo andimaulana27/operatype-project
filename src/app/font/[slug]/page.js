@@ -3,27 +3,40 @@
 
 import { useState } from 'react';
 import Image from "next/image";
-import Button from "@/components/Button";
-import ChecklistIcon from "@/components/icons/ChecklistIcon";
+import Link from 'next/link';
+import ImageGallery from '@/components/ImageGallery';
+import LicenseSelector from '@/components/LicenseSelector';
 import ProductCard from '@/components/ProductCard';
-import Link from 'next/link'; // <-- PERBAIKAN: TAMBAHKAN IMPORT INI
+import FileIcon from '@/components/icons/FileIcon';
+import ArchiveIcon from '@/components/icons/ArchiveIcon';
 
-// Data contoh untuk satu font. Nanti ini akan datang dari database.
+// Data contoh untuk satu font.
 const fontData = {
   name: 'Grande Amstera',
   author: 'operatype.co',
-  heroImage: '/product-previews/grande-amstera-main.jpg',
+  mainImage: '/product-previews/grande-amstera-main.jpg',
   galleryImages: [
     { src: '/product-previews/grande-amstera-1.jpg' },
     { src: '/product-previews/grande-amstera-2.jpg' },
     { src: '/product-previews/grande-amstera-3.jpg' },
+    { src: '/product-previews/grande-amstera-4.jpg' },
+    { src: '/product-previews/grande-amstera-5.jpg' },
+    { src: '/product-previews/grande-amstera-6.jpg' },
   ],
   licenses: [
-    { id: 'desktop', name: 'Desktop License', price: 19, description: 'For freelancers and individuals.' },
-    { id: 'business', name: 'Business License', price: 99, description: 'For small teams and web use.', popular: true },
-    { id: 'corporate', name: 'Corporate License', price: 299, description: 'For large organizations.' },
+    { id: 'desktop', name: 'Desktop License', price: 19 },
+    { id: 'business', name: 'Business License', price: 99, popular: true },
+    { id: 'corporate', name: 'Corporate License', price: 299 },
   ],
-  about: "Grande Amstera is a new modern and elegant script font from Operatype, perfect for any project like logos, branding, homewares, product packaging, mugs, quotes, posters, shopping bags, t-shirts, book covers, business cards, and all your other luxury projects that require a premium taste.",
+  fileTypes: "Grande Amstera OTF, TTF, WOFF",
+  fileSize: "612.35 KB",
+  about: "Grande Amstera - A New Modern Elegant Script Font, from Operatype, perfect for any project like: logos, branding projects, homewares designs, product packaging, mugs, quotes, posters, shopping bags, t-shirts, book covers, business cards, invitation cards, greeting cards, labels, photography, watermarks, special events and all your other luxury projects that require a premium taste.",
+  supportedLanguages: "The font includes support for 65 languages; Afrikaans, Albanian, Asu, Basque, Bemba, Bena, Breton, Catalan, Chiga, Cornish, Danish, Dutch, English, Faroese, Filipino, French, Friulian...",
+  productInfo: {
+    features: ["Uppercase & Lowercase", "Number & Punctuation", "Multilingual Support", "Ligatures, Alternates & Swashes", "PUA Encoded"],
+    styles: ["Regular"],
+    tags: ["Luxury", "Elegant", "Branding", "Wedding"],
+  },
   glyphs_image_url: "/product-previews/grande-amstera-glyphs.jpg"
 };
 
@@ -35,108 +48,113 @@ const similarFonts = [
 ];
 
 export default function ProductDetailPage() {
-  const [selectedLicense, setSelectedLicense] = useState(
-    fontData.licenses.find(l => l.popular) || fontData.licenses[0]
-  );
-  const [previewText, setPreviewText] = useState("The quick brown fox jumps over the lazy dog");
+  const [previewText, setPreviewText] = useState("Type Here");
 
   return (
     <div className="bg-white">
       <div className="container mx-auto max-w-[1748px] px-6 py-12">
-        {/* SECTION UTAMA: GALERI & PANEL AKSI */}
-        <section className="grid md:grid-cols-2 gap-16 items-start">
-          
+        <section className="grid md:grid-cols-[minmax(0,_1019px)_1fr] gap-12">
           {/* Kolom Kiri: Galeri Gambar */}
-          <div className="space-y-4 sticky top-28">
-            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden">
-              <Image src={fontData.heroImage} alt={`${fontData.name} hero image`} fill style={{objectFit: 'cover'}} priority />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              {fontData.galleryImages.map((img, index) => (
-                <div key={index} className="relative w-full aspect-video rounded-xl overflow-hidden">
-                  <Image src={img.src} alt={`${fontData.name} gallery image ${index+1}`} fill style={{objectFit: 'cover'}} />
-                </div>
-              ))}
-            </div>
+          <div className="sticky top-28">
+            <ImageGallery 
+              mainImage={fontData.mainImage} 
+              galleryImages={fontData.galleryImages} 
+            />
           </div>
 
           {/* Kolom Kanan: Panel Aksi */}
-          <div>
-            <h1 className="text-5xl font-medium text-[#3F3F3F]">{fontData.name}</h1>
-            <p className="text-lg font-light mt-2">by <Link href="/partners" className="text-[#C8705C] hover:underline">{fontData.author}</Link></p>
-            
-            <div className="my-8">
-              <h2 className="font-medium text-lg mb-4 text-[#3F3F3F]">Choose Your License</h2>
-              <div className="space-y-3">
-                {fontData.licenses.map(license => (
-                  <div 
-                    key={license.id}
-                    onClick={() => setSelectedLicense(license)}
-                    className={`border p-4 rounded-lg cursor-pointer transition-all ${selectedLicense.id === license.id ? 'border-[#C8705C] ring-2 ring-[#C8705C]/50' : 'border-gray-200 bg-gray-50 hover:border-gray-400'}`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <span className="font-medium text-[#3F3F3F]">{license.name}</span>
-                        <p className="text-sm text-gray-500 font-light">{license.description}</p>
-                      </div>
-                      <span className="text-lg font-medium text-[#3F3F3F]">${license.price.toFixed(2)}</span>
-                    </div>
-                  </div>
-                ))}
+          <div className="flex flex-col">
+            <div className='mb-6'>
+              <h1 className="text-[34px] font-medium text-[#3F3F3F]">{fontData.name}</h1>
+              <div className="mt-2">
+                <span className="bg-[#C8705C] text-white text-[14px] font-light w-[145px] h-[27px] flex items-center justify-center rounded-[21px]">
+                  by {fontData.author}
+                </span>
               </div>
             </div>
-
-            <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
-              <span className="font-medium text-[#3F3F3F]">Total</span>
-              <span className="text-3xl font-bold text-[#3F3F3F]">${selectedLicense.price.toFixed(2)}</span>
-            </div>
-
-            <div className="mt-6">
-              <Button href="#" variant="primary" className="w-full h-14 text-lg flex items-center justify-center">Add to Cart</Button>
-            </div>
             
-            <div className="mt-6">
-                <div className="flex items-start gap-x-3">
-                    <ChecklistIcon className="w-6 h-6 flex-shrink-0 text-[#C8705C]" />
-                    <p className="text-sm text-gray-500">For use in apps, games, or broadcast television, please request a custom license.</p>
-                </div>
-            </div>
+            <LicenseSelector licenses={fontData.licenses} />
           </div>
         </section>
 
-        {/* SECTION FONT PREVIEWER */}
-        <section className="mt-24 py-16 bg-[#F2F2F2] rounded-2xl">
-          <h2 className="text-3xl font-medium text-center text-[#3F3F3F]">Live Font Preview</h2>
-          <div className="mt-8 max-w-4xl mx-auto">
+        {/* ========================================================== */}
+        {/* SECTION LANJUTAN (DI BAWAH BAGIAN UTAMA)                   */}
+        {/* ========================================================== */}
+
+        {/* TYPE TESTER */}
+        <section className="mt-24">
+          <div className="flex justify-between items-center border border-gray-300 rounded-full p-2">
+            <select className="appearance-none bg-transparent py-2 px-4 outline-none">
+              <option>The quick brown fox...</option>
+            </select>
+            <input type="range" min="12" max="120" defaultValue="38" className="w-full mx-4" />
+            <span className="text-gray-500 whitespace-nowrap">38 px</span>
             <input 
               type="text"
-              defaultValue={previewText}
-              onChange={(e) => setPreviewText(e.target.value)}
-              className="w-full text-center text-lg p-3 bg-white/50 border border-gray-300 rounded-full outline-none focus:ring-1 focus:ring-[#C8705C] focus:border-[#C8705C]"
+              placeholder="Type Here"
+              onChange={(e) => setPreviewText(e.target.value || "Type Here")}
+              className="w-1/3 text-right bg-transparent py-2 px-4 outline-none"
             />
-            <div 
-              className="mt-8 text-6xl text-center break-words" 
-            >
-              {previewText}
+          </div>
+          <div className="mt-8 text-7xl text-center break-words text-[#3F3F3F]">
+            {previewText}
+          </div>
+        </section>
+
+        {/* ABOUT, INFO, & GLYPHS */}
+        <section className="mt-24 grid md:grid-cols-[2fr_1fr] gap-16">
+          {/* Kolom Kiri: About & Glyphs */}
+          <div className="space-y-16">
+            <div>
+              <h2 className="text-3xl font-medium text-[#3F3F3F]">About The Product</h2>
+              <div className="w-[103px] h-1 bg-[#C8705C] my-6"></div>
+              <p className="text-gray-600 font-light leading-relaxed">{fontData.about}</p>
+              <p className="text-gray-600 font-light leading-relaxed mt-4">{fontData.supportedLanguages}</p>
+            </div>
+            <div>
+              <h2 className="text-3xl font-medium text-[#3F3F3F]">Glyph</h2>
+              <div className="w-[103px] h-1 bg-[#C8705C] my-6"></div>
+              <div className="relative w-full h-auto">
+                <Image src={fontData.glyphs_image_url} alt={`Glyphs for ${fontData.name}`} width={800} height={500} className="mx-auto rounded-lg" />
+              </div>
+            </div>
+          </div>
+
+          {/* Kolom Kanan: Sidebar Informasi */}
+          <div className="sticky top-28">
+            <div className="border p-6 rounded-2xl">
+              <h3 className="text-2xl font-medium text-[#3F3F3F]">Product Information</h3>
+              <div className="mt-6 space-y-4 text-gray-600 font-light">
+                <div className="flex items-center gap-x-3">
+                  <FileIcon className="w-5 h-5 flex-shrink-0" />
+                  <span>{fontData.fileTypes}</span>
+                </div>
+                <div className="flex items-center gap-x-3">
+                  <ArchiveIcon className="w-5 h-5 flex-shrink-0" />
+                  <span>{fontData.fileSize}</span>
+                </div>
+              </div>
+              <div className="w-full h-px bg-gray-200 my-6"></div>
+              <div>
+                <h4 className="font-medium text-[#3F3F3F] mb-3">Features</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-600 font-light">
+                  {fontData.productInfo.features.map(item => <li key={item}>{item}</li>)}
+                </ul>
+              </div>
+              <div className="w-full h-px bg-gray-200 my-6"></div>
+              <div>
+                <h4 className="font-medium text-[#3F3F3F] mb-3">Tags</h4>
+                <div className="flex flex-wrap gap-2">
+                  {fontData.productInfo.tags.map(tag => (
+                    <span key={tag} className="bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full">{tag}</span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* SECTION ABOUT & GLYPHS */}
-        <section className="mt-24">
-            <div className="text-center">
-                <h2 className="text-3xl font-medium text-[#3F3F3F]">About & Glyphs</h2>
-                <div className="w-[103px] h-1 bg-[#C8705C] mx-auto my-6"></div>
-            </div>
-            <p className="max-w-4xl mx-auto text-center text-lg font-light text-gray-600">
-                {fontData.about}
-            </p>
-            <div className="mt-16">
-                <Image src={fontData.glyphs_image_url} alt={`Glyphs for ${fontData.name}`} width={1200} height={800} className="mx-auto rounded-lg" />
-            </div>
-        </section>
-
-        {/* SECTION YOU MIGHT ALSO LIKE */}
+        {/* YOU MIGHT ALSO LIKE */}
         <section className="mt-24">
             <div className="text-center mb-16">
                 <h2 className="text-3xl font-medium text-[#3F3F3F]">You Might Also Like</h2>
