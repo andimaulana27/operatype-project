@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Button from "./Button";
-import CheckmarkIcon from "./icons/CheckmarkIcon"; // Diubah dari ChecklistIcon
+import CheckmarkIcon from "./icons/CheckmarkIcon";
 import PlusIcon from "./icons/PlusIcon";
 import MinusIcon from "./icons/MinusIcon";
 
@@ -29,7 +29,10 @@ const LicenseSelector = ({ licenses }) => {
 
   return (
     <div className="w-full">
-      <h2 className="text-[38px] font-medium text-[#C8705C]">Choose Your License</h2>
+      {/* GARIS PEMBATAS BARU DITAMBAHKAN DI SINI */}
+      <div className="w-full h-px bg-[#3F3F3F] mb-6"></div>
+
+      <h2 className="text-[32px] font-medium text-[#C8705C]">Choose Your License</h2>
       <div className="w-full h-px bg-[#3F3F3F] my-4"></div>
 
       <div className="space-y-4">
@@ -37,11 +40,10 @@ const LicenseSelector = ({ licenses }) => {
           <div key={license.id}>
             <div onClick={() => handleSelect(license.id)} className="flex justify-between items-center cursor-pointer group p-2">
               <div className="flex items-center space-x-4">
-                {/* PERUBAHAN UTAMA PADA CHECKBOX */}
                 <div className={`w-[29px] h-[29px] border border-[#3F3F3F] rounded-[3px] flex items-center justify-center transition-colors ${selected[license.id] ? 'bg-[#C8705C] border-[#C8705C]' : 'bg-transparent'}`}>
                   {selected[license.id] && <CheckmarkIcon className="w-5 h-5 text-white" />}
                 </div>
-                <span className="text-[22px] font-normal text-[#3F3F3F]">{license.name}</span>
+                <span className="text-[20px] font-normal text-[#3F3F3F]">{license.name}</span>
               </div>
               <span className="text-[24px] font-medium text-[#C8705C]">${license.price.toFixed(2)}</span>
             </div>

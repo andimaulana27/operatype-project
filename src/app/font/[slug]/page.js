@@ -7,21 +7,23 @@ import Link from 'next/link';
 import ImageGallery from '@/components/ImageGallery';
 import LicenseSelector from '@/components/LicenseSelector';
 import ProductCard from '@/components/ProductCard';
+import Button from '@/components/Button';
 import FileIcon from '@/components/icons/FileIcon';
 import ArchiveIcon from '@/components/icons/ArchiveIcon';
 
-// Data contoh untuk satu font.
+// Data contoh untuk satu font. Nanti ini akan datang dari database.
 const fontData = {
   name: 'Grande Amstera',
   author: 'operatype.co',
   mainImage: '/product-previews/grande-amstera-main.jpg',
   galleryImages: [
-    { src: '/product-previews/grande-amstera-1.jpg' },
-    { src: '/product-previews/grande-amstera-2.jpg' },
-    { src: '/product-previews/grande-amstera-3.jpg' },
-    { src: '/product-previews/grande-amstera-4.jpg' },
-    { src: '/product-previews/grande-amstera-5.jpg' },
-    { src: '/product-previews/grande-amstera-6.jpg' },
+    { src: '/product-previews/grande-amstera-1.jpg' }, { src: '/product-previews/grande-amstera-2.jpg' },
+    { src: '/product-previews/grande-amstera-3.jpg' }, { src: '/product-previews/grande-amstera-4.jpg' },
+    { src: '/product-previews/grande-amstera-5.jpg' }, { src: '/product-previews/grande-amstera-6.jpg' },
+    { src: '/product-previews/grande-amstera-7.jpg' }, { src: '/product-previews/grande-amstera-8.jpg' },
+    { src: '/product-previews/grande-amstera-9.jpg' }, { src: '/product-previews/grande-amstera-10.jpg' },
+    { src: '/product-previews/grande-amstera-11.jpg' }, { src: '/product-previews/grande-amstera-12.jpg' },
+    { src: '/product-previews/grande-amstera-13.jpg' }, { src: '/product-previews/grande-amstera-14.jpg' },
   ],
   licenses: [
     { id: 'desktop', name: 'Desktop License', price: 19 },
@@ -31,7 +33,7 @@ const fontData = {
   fileTypes: "Grande Amstera OTF, TTF, WOFF",
   fileSize: "612.35 KB",
   about: "Grande Amstera - A New Modern Elegant Script Font, from Operatype, perfect for any project like: logos, branding projects, homewares designs, product packaging, mugs, quotes, posters, shopping bags, t-shirts, book covers, business cards, invitation cards, greeting cards, labels, photography, watermarks, special events and all your other luxury projects that require a premium taste.",
-  supportedLanguages: "The font includes support for 65 languages; Afrikaans, Albanian, Asu, Basque, Bemba, Bena, Breton, Catalan, Chiga, Cornish, Danish, Dutch, English, Faroese, Filipino, French, Friulian...",
+  supportedLanguages: "The font includes support for 65 languages; Afrikaans, Albanian, Asu, Basque, Bemba, Bena, Breton, Catalan, Chiga, Cornish, Danish, Dutch, English, Faroese, Filipino, French, Friulian, Galician, German, Gusii, Indonesian, Irish, Italian, Kabuverdianu, Kalenjin, Kinyarwanda, Luo, Luxembourg, Luyia, Machame, Makhuwa-Meetto, Makonde, Malagasy, Manx, Morisyen, North Ndebele, Norwegian Bokmål, Nynorsk, Norwegian, Nyankole, Oromo, Portuguese, Quechua, Romansh, Rombo, Rundi, Rwa, Samburu, Sango, Sangu, Scottish Gaelic, Sena, Shambala, Shona, Soga, Somali, Spanish, Swahili, Swedish, Swiss, German, Taita, Teso, Uzbek (Latin), Volapük, Vunjo, Zulu.",
   productInfo: {
     features: ["Uppercase & Lowercase", "Number & Punctuation", "Multilingual Support", "Ligatures, Alternates & Swashes", "PUA Encoded"],
     styles: ["Regular"],
@@ -47,13 +49,16 @@ const similarFonts = [
     { name: 'Flower Blossom', slug: 'flower-blossom', desc: 'A Beautiful Handwritten Font', price: '$15.00', imageUrl: '/placeholder-image.jpg' },
 ];
 
+
 export default function ProductDetailPage() {
   const [previewText, setPreviewText] = useState("Type Here");
 
   return (
     <div className="bg-white">
       <div className="container mx-auto max-w-[1748px] px-6 py-12">
-        <section className="grid md:grid-cols-[minmax(0,_1019px)_1fr] gap-12">
+        {/* SECTION UTAMA: GALERI & PANEL AKSI */}
+        <section className="grid md:grid-cols-[minmax(0,_1116px)_1fr] gap-12">
+          
           {/* Kolom Kiri: Galeri Gambar */}
           <div className="sticky top-28">
             <ImageGallery 
@@ -65,7 +70,7 @@ export default function ProductDetailPage() {
           {/* Kolom Kanan: Panel Aksi */}
           <div className="flex flex-col">
             <div className='mb-6'>
-              <h1 className="text-[34px] font-medium text-[#3F3F3F]">{fontData.name}</h1>
+              <h1 className="text-[26px] font-medium text-[#3F3F3F]">{fontData.name}</h1>
               <div className="mt-2">
                 <span className="bg-[#C8705C] text-white text-[14px] font-light w-[145px] h-[27px] flex items-center justify-center rounded-[21px]">
                   by {fontData.author}
@@ -77,11 +82,7 @@ export default function ProductDetailPage() {
           </div>
         </section>
 
-        {/* ========================================================== */}
-        {/* SECTION LANJUTAN (DI BAWAH BAGIAN UTAMA)                   */}
-        {/* ========================================================== */}
-
-        {/* TYPE TESTER */}
+        {/* SECTION FONT PREVIEWER */}
         <section className="mt-24">
           <div className="flex justify-between items-center border border-gray-300 rounded-full p-2">
             <select className="appearance-none bg-transparent py-2 px-4 outline-none">
@@ -96,12 +97,14 @@ export default function ProductDetailPage() {
               className="w-1/3 text-right bg-transparent py-2 px-4 outline-none"
             />
           </div>
-          <div className="mt-8 text-7xl text-center break-words text-[#3F3F3F]">
+          <div 
+            className="mt-8 text-7xl text-center break-words text-[#3F3F3F]"
+          >
             {previewText}
           </div>
         </section>
 
-        {/* ABOUT, INFO, & GLYPHS */}
+        {/* SECTION ABOUT, INFO, & GLYPHS */}
         <section className="mt-24 grid md:grid-cols-[2fr_1fr] gap-16">
           {/* Kolom Kiri: About & Glyphs */}
           <div className="space-y-16">
@@ -166,7 +169,6 @@ export default function ProductDetailPage() {
                 ))}
             </div>
         </section>
-
       </div>
     </div>
   );
