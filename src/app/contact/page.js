@@ -1,6 +1,6 @@
 // src/app/contact/page.js
-import Button from '@/components/Button';
-import DropdownIcon from '@/components/icons/DropdownIcon';
+import Button from "@/components/Button";
+import DropdownIcon from "@/components/icons/DropdownIcon";
 
 export default function ContactPage() {
   
@@ -15,7 +15,7 @@ export default function ContactPage() {
             <h1 className="text-4xl md:text-5xl font-medium text-[#3F3F3F]">Get in Touch</h1>
             <div className="w-[103px] h-1 bg-[#C8705C] mx-auto my-6"></div>
             <p className="mt-4 text-[18px] font-light text-[#3F3F3F] leading-relaxed">
-              We're excited to hear about your ideas. Reach out and let's create something timeless together.
+              We"re excited to hear about your ideas. Reach out and let"s create something timeless together.
             </p>
           </div>
         </section>
@@ -79,7 +79,7 @@ export default function ContactPage() {
                   variant="primary" 
                   // Ukuran sekarang fleksibel dengan tinggi tetap
                   className="w-full h-[79px] flex items-center justify-center text-[22px] font-medium rounded-[44px]"
-                  onClick={(e) => { e.preventDefault(); alert('Form submitted!'); }}
+                  onClick={(e) => { e.preventDefault(); alert("Form submitted!"); }}
                 >
                   Send Message
                 </Button>

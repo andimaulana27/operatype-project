@@ -1,6 +1,6 @@
 // src/app/about/page.js
-import Image from 'next/image';
-import Button from '@/components/Button';
+import Image from "next/image";
+import Button from "@/components/Button";
 
 export default function AboutPage() {
   return (
@@ -80,7 +80,7 @@ export default function AboutPage() {
               <div className="relative w-[787px] h-[499px] rounded-2xl overflow-hidden shadow-sm bg-gray-200">
                 <Image
                   src="/about-story.png" // GANTI DENGAN PATH GAMBAR ANDA
-                  alt="Hand writing 'operatype.co'"
+                  alt="Hand writing operatype.co"
                   fill
                   className="object-cover"
                 />
