@@ -1,6 +1,6 @@
 // src/app/contact/page.js
-import Button from "@/components/Button";
-import DropdownIcon from "@/components/icons/DropdownIcon";
+import Button from '@/components/Button';
+import DropdownIcon from '@/components/icons/DropdownIcon';
 
 export default function ContactPage() {
   
@@ -14,25 +14,22 @@ export default function ContactPage() {
           <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-medium text-[#3F3F3F]">Get in Touch</h1>
             <div className="w-[103px] h-1 bg-[#C8705C] mx-auto my-6"></div>
+            {/* PERBAIKAN DI SINI */}
             <p className="mt-4 text-[18px] font-light text-[#3F3F3F] leading-relaxed">
-              We"re excited to hear about your ideas. Reach out and let"s create something timeless together.
+              We&apos;re excited to hear about your ideas. Reach out and let&apos;s create something timeless together.
             </p>
           </div>
         </section>
 
-        {/* PERUBAHAN UTAMA ADA DI DALAM SECTION INI */}
         <section className="pb-16 sm:pb-24">
-          {/* Menggunakan max-w-3xl agar lebih proporsional */}
           <div className="max-w-3xl mx-auto">
             <form action="#" method="POST" className="space-y-6">
               
-              {/* Menggunakan grid untuk layout 2 kolom yang responsif */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <input
                   type="text"
                   name="name"
                   id="name"
-                  // Ukuran sekarang fleksibel dengan tinggi tetap
                   className={`${inputStyle} h-[65px] rounded-[44px]`}
                   placeholder="Your Name"
                 />
@@ -49,7 +46,6 @@ export default function ContactPage() {
                 <select
                   id="subject"
                   name="subject"
-                  // Ukuran sekarang fleksibel dengan tinggi tetap
                   className={`${inputStyle} h-[65px] rounded-[44px] appearance-none pr-12`}
                 >
                   <option>Subject</option>
@@ -67,7 +63,6 @@ export default function ContactPage() {
                 <textarea
                   id="message"
                   name="message"
-                  // Ukuran sekarang fleksibel dengan tinggi tetap
                   className={`${inputStyle} h-[196px] rounded-[44px] py-4 resize-none`}
                   placeholder="Message"
                 />
@@ -77,9 +72,8 @@ export default function ContactPage() {
                 <Button 
                   href="#"
                   variant="primary" 
-                  // Ukuran sekarang fleksibel dengan tinggi tetap
                   className="w-full h-[79px] flex items-center justify-center text-[22px] font-medium rounded-[44px]"
-                  onClick={(e) => { e.preventDefault(); alert("Form submitted!"); }}
+                  onClick={(e) => { e.preventDefault(); alert('Form submitted!'); }}
                 >
                   Send Message
                 </Button>
