@@ -54,7 +54,7 @@ export default function Home() {
   ];
 
   return (
-    <>
+    <main>
       {/* HERO SECTION - TEKS */}
       <section className="container mx-auto max-w-[1748px] px-6 text-center pt-16 pb-12">
         <div className="flex flex-col items-center">
@@ -263,6 +263,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

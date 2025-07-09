@@ -22,7 +22,8 @@ export default function RootLayout({ children }) {
       {/* 3. Terapkan class font ke body */}
       <body className={`${poppins.className} bg-[#f9f9f9]`}>
         <Navbar />
-        <main>{children}</main>
+        {/* <main> dihapus dari sini */}
+        {children}
         <Footer />
       </body>
     </html>
