@@ -21,7 +21,7 @@ export default function LicensePage() {
       title: "Website License",
       subtitle: "For Use on the Web",
       details:
-        "Allows you to embed the font into a single website's code, so it appears as live, selectable text.",
+        "Allows you to embed the font into a single website&apos;s code, so it appears as live, selectable text.",
       features: [
         "Use on one (1) website domain.",
         "License covers up to 50,000 monthly pageviews. (Contact us for higher traffic sites).",
