@@ -1,9 +1,6 @@
 // src/app/layout.js
-
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,19 +12,15 @@ export const metadata = {
   description: "A marketplace for high-quality, handcrafted fonts.",
 };
 
+// Ini adalah layout root yang SANGAT MINIMAL
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      {/* PERBAIKAN DI SINI:
-        Tambahkan `suppressHydrationWarning` ke tag body 
-      */}
       <body 
-        className={`${poppins.className} bg-[#f9f9f9]`}
+        className={`${poppins.className} bg-white`}
         suppressHydrationWarning={true}
       >
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
