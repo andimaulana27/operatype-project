@@ -74,11 +74,13 @@ export default function LicensePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-8">
             
             {licenses.map((license) => (
-              <div key={license.title} className="w-[554px] h-[509px] border border-[#3F3F3F] rounded-2xl p-8 flex flex-col">
+              // PERUBAHAN DI SINI: Kembali ke struktur awal di dalam kartu
+              <div key={license.title} className="w-[554px] border border-[#3F3F3F] rounded-2xl p-8 flex flex-col">
                 <h2 className="text-[28px] font-medium text-[#3F3F3F]">{license.title}</h2>
                 <div className="w-[103px] h-1 bg-[#C8705C] my-4"></div>
                 <p className="text-[20px] font-normal text-[#3F3F3F]">{license.subtitle}</p>
-                <p className="text-[16px] font-light text-[#3F3F3F] my-6 flex-grow">{license.details}</p>
+                <p className="text-[16px] font-light text-[#3F3F3F] my-6">{license.details}</p>
+                {/* Menghapus mt-auto dari sini */}
                 <ul className="space-y-4">
                   {license.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-x-3">
@@ -90,13 +92,12 @@ export default function LicensePage() {
               </div>
             ))}
 
-            <div className="w-[554px] h-[509px] border border-[#3F3F3F] rounded-2xl p-8 flex flex-col justify-center items-center text-center">
+            <div className="w-[554px] border border-[#3F3F3F] rounded-2xl p-8 flex flex-col justify-center items-center text-center">
                 <h2 className="text-[28px] font-medium text-[#3F3F3F]">Need a Custom Solution?</h2>
                 <div className="w-[103px] h-1 bg-[#C8705C] my-4"></div>
                 <p className="text-[18px] font-normal text-[#3F3F3F] mt-2">
                   On a Limited Budget or Need a Custom License?
                 </p>
-                {/* PERBAIKAN DI SINI */}
                 <p className="text-[16px] font-light text-[#3F3F3F] my-6 max-w-md">
                   Our team can create a tailored package that fits your project&apos;s unique scope and budget. We&apos;re here to help.
                 </p>
