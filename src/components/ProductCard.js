@@ -1,40 +1,46 @@
 // src/components/ProductCard.js
 import Image from "next/image";
+import Link from "next/link";
 import Button from "./Button";
 
-// 1. Tambahkan 'slug' di sini untuk menerima data link
-const ProductCard = ({ fontName, description, price, imageUrl, tagText, slug }) => {
+const ProductCard = ({ fontName, description, price, imageUrl, slug }) => {
   return (
-    <div className="group rounded-[15px] p-4 hover:-translate-y-2 transition-transform duration-300 ease-in-out w-full">
+    <div className="group w-full max-w-sm mx-auto transition-all duration-300 hover:-translate-y-1">
+      {/* Gambar Produk */}
+      <Link href={`/font/${slug || 'sample-font'}`}>
+        <div className="relative w-full aspect-[308/205] rounded-2xl bg-gray-200 overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
+          <Image
+            src={imageUrl || "/placeholder-image.jpg"}
+            alt={`Mockup for ${fontName}`}
+            fill
+            style={{ objectFit: 'cover' }}
+            className="transition-transform duration-300 ease-in-out group-hover:scale-105"
+          />
+        </div>
+      </Link>
       
-      <div className="relative w-full aspect-[308/205] rounded-[15px] bg-gray-200 overflow-hidden shadow-md group-hover:shadow-xl transition-shadow duration-300">
-        <Image
-          src={imageUrl || "/placeholder-image.jpg"}
-          alt={`Mockup for ${fontName}`}
-          fill
-          style={{ objectFit: 'cover' }}
-          className="transition-transform duration-300 ease-in-out group-hover:scale-105"
-        />
-      </div>
-
+      {/* Konten di Bawah Gambar */}
       <div className="mt-4 px-1">
-        <div className="flex justify-between items-center">
-          <h3 className="font-medium text-[22px] text-[#3F3F3F]">{fontName}</h3>
-          {tagText && (
-            <span className="border border-orange-500 text-orange-600 text-xs font-light px-3 py-1 rounded-full">
-              {tagText}
-            </span>
-          )}
+        {/* Nama & Deskripsi Font */}
+        <div>
+          <h3 className="font-medium text-[22px] text-[#3F3F3F] group-hover:text-[#C8705C] transition-colors truncate">
+            {fontName || "Font Name"}
+          </h3>
+          <p className="font-light text-sm text-gray-500 mt-1 truncate">
+            {description || "Font description"}
+          </p>
         </div>
         
-        <p className="font-light text-[18px] text-gray-500 mt-1">{description}</p>
-        
+        {/* Tombol & Harga */}
         <div className="mt-4 flex justify-between items-center">
-          {/* 2. Perbarui 'href' pada tombol ini */}
-          <Button href={`/font/${slug || 'sample-font'}`} variant="primary" className="w-[123px] h-[32px] text-[12px] flex items-center justify-center">
+          <Button 
+            href={`/font/${slug || 'sample-font'}`} 
+            variant="primary" 
+            className="h-10 text-sm flex items-center justify-center px-6 rounded-full"
+          >
             View Detail
           </Button>
-          <p className="font-medium text-[24px] text-[#C8705C]">{price}</p>
+          <p className="font-medium text-2xl text-[#C8705C]">{price || "$0.00"}</p>
         </div>
       </div>
     </div>
