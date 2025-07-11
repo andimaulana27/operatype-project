@@ -1,15 +1,12 @@
-// src/app/partners/[slug]/page.js
 "use client";
 
 import ProductCard from "@/components/ProductCard";
 import SearchIcon from "@/components/icons/SearchIcon";
+import DropdownIcon from "@/components/icons/DropdownIcon";
 import Pagination from "@/components/Pagination";
-import CustomDropdown from "@/components/CustomDropdown"; // Impor komponen baru
 
-// Data contoh untuk partner
 const partnerFonts = [
-    // ... data 32 font seperti sebelumnya ...
-  { name: 'Battesa Royales', slug: 'battesa-royales', description: 'A Beauty Handwritten Script, from Operatype', price: '$15.00', imageUrl: '/placeholder-image.jpg' },
+   {name: 'Battesa Royales', slug: 'battesa-royales', description: 'A Beauty Handwritten Script, from Operatype', price: '$15.00', imageUrl: '/placeholder-image.jpg' },
   { name: 'Pullwist', slug: 'pullwist', description: 'A Modern Handwritten Script, from Operatype', price: '$15.00', imageUrl: '/placeholder-image.jpg' },
   { name: 'Santuary Portrait', slug: 'santuary-portrait', description: 'A Modern Handwritten Font, from Operatype', price: '$15.00', imageUrl: '/placeholder-image.jpg' },
   { name: 'Flower Blossom', slug: 'flower-blossom', description: 'A New Modern Elegant Script Font, from Operatype.co', price: '$15.00', imageUrl: '/placeholder-image.jpg' },
@@ -44,9 +41,15 @@ const partnerFonts = [
 ];
 
 const partnerName = "Brand Partner Name";
-const categoryOptions = ["Category", "Script", "Signature", "Handwritten", "Display"];
-const sortOptions = ["Sort by: Popularity", "Sort by: Newest"];
-
+const categories = ["Script", "Signature", "Handwritten", "Display"];
+const sortOptions = [
+  "Sort by: Popularity",
+  "Sort by: Newest",
+  "Sort by: Price (Low to High)",
+  "Sort by: Price (High to Low)",
+  "Sort by: Name (A-Z)",
+  "Sort by: Name (Z-A)"
+];
 
 export default function PartnerDetailPage({ params }) {
   return (
@@ -64,6 +67,8 @@ export default function PartnerDetailPage({ params }) {
         {/* Panel Filter & Sortir */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
           <div className="w-full md:w-auto flex flex-col sm:flex-row items-center gap-4">
+            
+            {/* Field Search */}
             <div className="relative">
               <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                 <SearchIcon className="w-5 h-5 text-[#C8705C]" />
@@ -74,17 +79,36 @@ export default function PartnerDetailPage({ params }) {
                 className="w-[281px] h-[35px] bg-transparent border border-[#3F3F3F] rounded-full pl-5 pr-12 py-3 text-[14px] font-light text-[#3F3F3F] placeholder:text-[#9C9C9C] focus:ring-1 focus:ring-[#C8705C] focus:border-[#C8705C] outline-none hover:border-[#C8705C]"
               />
             </div>
-            {/* PERUBAHAN DI SINI: Menggunakan komponen CustomDropdown */}
-            <CustomDropdown options={categoryOptions} />
+
+            {/* Field Category */}
+            <div className="relative">
+              <select className="appearance-none w-[131px] h-[35px] bg-transparent py-1 px-5 border border-[#3F3F3F] rounded-full text-[14px] font-light text-[#3F3F3F] focus:ring-1 focus:ring-[#C8705C] focus:border-[#C8705C] outline-none hover:border-[#C8705C]">
+                <option>Category</option>
+                {categories.map(cat => <option key={cat}>{cat}</option>)}
+              </select>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <DropdownIcon className="w-4 h-4 text-[#C8705C]" />
+              </span>
+            </div>
           </div>
-          <div className="w-full md:w-auto">
-            {/* PERUBAHAN DI SINI: Menggunakan komponen CustomDropdown */}
-            <CustomDropdown options={sortOptions} />
+
+          {/* Field Sort by */}
+          <div className="w-full md:w-auto relative">
+            <select className="appearance-none w-[191px] h-[35px] bg-transparent py-1 px-5 border border-[#3F3F3F] rounded-full text-[14px] font-light text-[#3F3F3F] focus:ring-1 focus:ring-[#C8705C] focus:border-[#C8705C] outline-none hover:border-[#C8705C]">
+              {sortOptions.map(option => (
+                <option key={option}>{option}</option>
+              ))}
+            </select>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+              <DropdownIcon className="w-4 h-4 text-[#C8705C]" />
+            </span>
           </div>
         </div>
 
+        {/* Garis Pemisah */}
         <div className="w-full h-px bg-[#9c9c9c] mb-16"></div>
 
+        {/* Grid Font */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 place-items-center">
           {partnerFonts.map((font) => (
             <ProductCard 
@@ -98,6 +122,7 @@ export default function PartnerDetailPage({ params }) {
           ))}
         </div>
 
+        {/* Pagination */}
         <div className="mt-20 flex justify-center">
           <Pagination />
         </div>

@@ -4,7 +4,7 @@ import DropdownIcon from '@/components/icons/DropdownIcon';
 
 export default function ContactPage() {
   
-  const inputStyle = "w-full bg-[#EFEFEF] border-transparent px-6 text-[16px] text-[#3F3F3F] font-normal placeholder:text-[#3F3F3F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C8705C] transition-shadow duration-300";
+  const inputStyle = "w-full bg-[#f2f2f2] border-transparent px-6 text-[16px] text-[#3F3F3F] font-normal placeholder:text-[#3F3F3F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C8705C] transition-shadow duration-300";
 
   return (
     <div className="bg-[#f9f9f9]">

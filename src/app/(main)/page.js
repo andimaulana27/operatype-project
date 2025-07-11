@@ -54,7 +54,7 @@ export default function Home() {
   ];
 
   return (
-    <main>
+    <main className="bg-[#f9f9f9]">
       {/* HERO SECTION - TEKS */}
       <section className="container mx-auto max-w-[1748px] px-6 text-center pt-16 pb-12">
         <div className="flex flex-col items-center">
@@ -234,7 +234,7 @@ export default function Home() {
       </section>
 
       {/* INSTAGRAM SECTION */}
-      <section className="w-full bg-white py-20">
+      <section className="w-full bg-[#F2F2F2] py-20">
         <div className="container mx-auto max-w-[1748px] px-6">
           <div className="text-center mb-16">
             <h2 className="text-[38px] font-medium text-[#3F3F3F]">Join Our Creative Community</h2>

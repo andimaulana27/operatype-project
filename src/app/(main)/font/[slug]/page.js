@@ -52,7 +52,7 @@ export default function ProductDetailPage({ params }) {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#f9f9f9]">
       <div className="container mx-auto max-w-[1748px] px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-8">
 

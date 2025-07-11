@@ -9,11 +9,17 @@ const ProductSidebar = ({ fileTypes, fileSize, features, styles, tags }) => {
       {/* File Info */}
       <div className="space-y-4 text-gray-600 font-light">
         <div>
-          <h3 className="font-medium text-[#3F3F3F]">File Type</h3>
+          <h3 className="font-medium text-[#3F3F3F] flex items-center gap-2">
+            <FileIcon className="w-4 h-4 text-[#C8705C]" />
+            File Type
+          </h3>
           <p className="text-sm">{fileTypes}</p>
         </div>
         <div>
-          <h3 className="font-medium text-[#3F3F3F]">File Size</h3>
+          <h3 className="font-medium text-[#3F3F3F] flex items-center gap-2">
+            <ArchiveIcon className="w-4 h-4 text-[#C8705C]" />
+            File Size
+          </h3>
           <p className="text-sm">{fileSize}</p>
         </div>
       </div>
