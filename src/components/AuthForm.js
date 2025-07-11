@@ -18,7 +18,7 @@ export default function AuthForm() {
   const inputStyle =
     "bg-[#F2F2F2] border-none p-4 my-2 w-full rounded-xl outline-none text-[#3F3F3F] font-light";
   const formButtonStyle =
-    "bg-[#C8705C] text-white rounded-full w-full py-3 text-sm font-medium tracking-wider uppercase transition-transform hover:scale-105";
+    "bg-[#C8705C] text-white rounded-full w-full py-3 text-sm font-medium tracking-wider uppercase transition-colors duration-300 hover:bg-[#FF7C5E]";
   const overlayButtonStyle =
     "bg-transparent border border-white text-white rounded-full px-12 py-3 text-sm font-medium tracking-wider uppercase transition-all hover:bg-white hover:text-[#C8705C]";
 
