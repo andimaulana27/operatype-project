@@ -3,24 +3,20 @@
 import Link from 'next/link';
 import CartItem from '@/components/CartItem';
 import Button from '@/components/Button';
-
-// --- DATA CONTOH ---
-const cartItems = [
-    { id: 1, name: 'Royales Horizon', license: 'Desktop license', price: 15.00, imageUrl: '/product-previews/thumb-1.jpg' },
-    { id: 2, name: 'Artfully Stylish', license: 'Business License', price: 15.00, imageUrl: '/product-previews/thumb-2.jpg' },
-    { id: 3, name: 'Ballitesa Royales', license: 'Business License', price: 15.00, imageUrl: '/product-previews/thumb-3.jpg' },
-    { id: 4, name: 'Grande Amstera', license: 'Business License', price: 15.00, imageUrl: '/product-previews/thumb-4.jpg' },
-    { id: 5, name: 'Brookside Pasture', license: 'Corporate License', price: 15.00, imageUrl: '/product-previews/thumb-5.jpg' },
-];
+import { useCart } from '@/context/CartContext';
 
 const userInfo = {
     fullName: 'John doe',
     email: 'Johndoe@gmail.com'
 };
 
-const total = cartItems.reduce((sum, item) => sum + item.price, 0);
-
 export default function CartPage() {
+    // 2. Panggil hook useCart untuk mendapatkan state dan fungsi
+    const { cartItems, removeFromCart } = useCart();
+
+    // 3. Hitung total harga secara dinamis
+    const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
     return (
         <main className="container mx-auto max-w-[1748px] px-6 py-12">
             <div className="text-center mb-12">
@@ -33,15 +29,22 @@ export default function CartPage() {
                 <div>
                     <h2 className="text-2xl font-medium text-[#3F3F3F]">Order Summary</h2>
                     <div className="mt-6 divide-y divide-gray-200">
-                        {cartItems.map(item => (
-                            <CartItem
-                                key={item.id}
-                                name={item.name}
-                                license={item.license}
-                                price={item.price}
-                                imageUrl={item.imageUrl}
-                            />
-                        ))}
+                        {cartItems.length > 0 ? (
+                            cartItems.map(item => (
+                                <CartItem
+                                    key={item.id}
+                                    name={item.name}
+                                    license={item.license}
+                                    price={item.price}
+                                    quantity={item.quantity}
+                                    imageUrl={item.imageUrl}
+                                    // 4. Kirim fungsi remove ke komponen CartItem
+                                    onRemove={() => removeFromCart(item.id)}
+                                />
+                            ))
+                        ) : (
+                            <p className="py-4 text-center text-gray-500">Your cart is empty.</p>
+                        )}
                     </div>
                 </div>
 
@@ -62,7 +65,6 @@ export default function CartPage() {
                         <p className="text-sm text-gray-500 mt-2">Not you? <Link href="/logout" className="text-[#C8705C] hover:underline">Logout</Link></p>
                     </div>
                     
-                    {/* PERBAIKAN DI SINI: Mengubah rounded-full menjadi rounded-[17px] */}
                     <div className="flex justify-between items-center border border-gray-300 rounded-[17px] px-8 py-4">
                         <span className="text-xl text-[#3F3F3F]">Total</span>
                         <span className="text-2xl font-medium text-[#C8705C]">${total.toFixed(2)}</span>

@@ -6,9 +6,13 @@ import Image from 'next/image';
 import CartIcon from './icons/CartIcon';
 import UserIcon from './icons/UserIcon';
 import { usePathname } from 'next/navigation';
+import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext'; // 1. Import useAuth
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { cartItemCount } = useCart();
+  const { isAuthenticated, logout } = useAuth(); // 2. Dapatkan status login dan fungsi logout
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -54,7 +58,7 @@ const Navbar = () => {
                     className={`
                       absolute left-0 -bottom-1 block h-0.5 bg-[#C8705C] transition-all duration-[450ms] ease-in
                       ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}
-                    `} // <-- KEMBALI KE VERSI INI
+                    `}
                   ></span>
                 </Link>
               );
@@ -62,15 +66,32 @@ const Navbar = () => {
           </nav>
 
           <div className="hidden md:flex items-center space-x-5">
-            <Link href="/cart" aria-label="Shopping Cart" className="text-[#3F3F3F] hover:text-[#C8705C] transition-colors">
+            <Link href="/cart" aria-label="Shopping Cart" className="relative text-[#3F3F3F] hover:text-[#C8705C] transition-colors">
               <CartIcon className="w-[26px] h-[26px]" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 bg-[#C8705C] text-white text-xs rounded-full">
+                  {cartItemCount}
+                </span>
+              )}
             </Link>
             
             <div className="h-6 w-px bg-[#C8705C]"></div>
 
-            <Link href="/login" aria-label="Login or a personal account" className="text-[#3F3F3F] hover:text-[#C8705C] transition-colors">
-              <UserIcon className="w-[26px] h-[26px]" />
-            </Link>
+            {/* 3. Tampilkan tombol sesuai status login */}
+            {isAuthenticated ? (
+              // Jika sudah login, tampilkan tombol Logout
+              <button 
+                onClick={logout}
+                className="text-sm font-medium text-[#3F3F3F] hover:text-[#C8705C]"
+              >
+                Logout
+              </button>
+            ) : (
+              // Jika belum login, tampilkan ikon User ke halaman login
+              <Link href="/login" aria-label="Login or a personal account" className="text-[#3F3F3F] hover:text-[#C8705C] transition-colors">
+                <UserIcon className="w-[26px] h-[26px]" />
+              </Link>
+            )}
           </div>
 
           <div className="md:hidden">

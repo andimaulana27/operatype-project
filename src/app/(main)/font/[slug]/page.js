@@ -1,4 +1,4 @@
-// src/app/font/[slug]/page.js
+// src/app/(main)/font/[slug]/page.js
 "use client"; 
 
 import Image from "next/image";
@@ -62,13 +62,11 @@ export default function ProductDetailPage({ params }) {
             <TypeTester />
             <div className="mt-16">
               <h2 className="text-xl font-medium text-[#3F3F3F]">About The Product</h2>
-              {/* PERBAIKAN: Menambahkan garis oranye */}
               <div className="w-[103px] h-1 bg-[#C8705C] my-4"></div>
               <p className="text-gray-600 font-light leading-relaxed">{fontData.about}</p>
             </div>
             <div className="mt-16">
               <h2 className="text-xl font-medium text-[#3F3F3F]">Glyph</h2>
-              {/* PERBAIKAN: Menambahkan garis oranye */}
               <div className="w-[103px] h-1 bg-[#C8705C] my-4"></div>
               <GlyphGrid characters={fontData.glyphs} />
             </div>
@@ -77,7 +75,6 @@ export default function ProductDetailPage({ params }) {
           {/* Kolom Kanan (Sidebar) */}
           <div className="sticky top-28 h-fit">
             <h1 className="text-4xl font-medium text-[#3F3F3F]">{fontData.name}</h1>
-            {/* PERBAIKAN: Mengembalikan badge author ke ukuran spesifik sesuai desain */}
             <div className="mt-4">
               <span className="bg-[#C8705C] text-white text-[14px] font-light w-[134px] h-[27px] flex items-center justify-center rounded-full">
                 by {fontData.author}
@@ -87,7 +84,7 @@ export default function ProductDetailPage({ params }) {
             {fontData.licenses && (
               <LicenseSelector
                 licenses={fontData.licenses}
-                initialPrice={fontData.licenses.desktop?.price || 0}
+                product={fontData} // Pastikan hanya prop ini yang dikirim
               />
             )}
             <ProductSidebar

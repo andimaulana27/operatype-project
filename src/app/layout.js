@@ -1,6 +1,8 @@
 // src/app/layout.js
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext"; // 1. Import AuthProvider
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -12,15 +14,19 @@ export const metadata = {
   description: "A marketplace for high-quality, handcrafted fonts.",
 };
 
-// Ini adalah layout root yang SANGAT MINIMAL
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body 
-        className={`${poppins.className} bg-[#f9f9f9]"`}
+        className={`${poppins.className} bg-[#f9f9f9]`}
         suppressHydrationWarning={true}
       >
-        {children}
+        {/* 2. Bungkus semua provider di sini */}
+        <AuthProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
