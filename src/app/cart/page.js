@@ -5,22 +5,20 @@ import Link from 'next/link';
 import CartItem from '@/components/CartItem';
 import Button from '@/components/Button';
 import { useCart } from '@/context/CartContext';
-import { useAuth } from '@/context/AuthContext'; // 1. Import useAuth
+import { useAuth } from '@/context/AuthContext';
 
 export default function CartPage() {
     const { cartItems, removeFromCart } = useCart();
-    const { user, isAuthenticated } = useAuth(); // 2. Panggil useAuth
+    const { user, isAuthenticated } = useAuth();
 
     const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    // 3. State untuk countdown timer
     const [timeLeft, setTimeLeft] = useState({
         hours: 12,
         minutes: 0,
         seconds: 0,
     });
 
-    // 4. Logika untuk countdown
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeLeft(prevTime => {
@@ -34,14 +32,13 @@ export default function CartPage() {
                 if (hours > 0) {
                     return { hours: hours - 1, minutes: 59, seconds: 59 };
                 }
-                return prevTime; // Waktu habis
+                return prevTime;
             });
         }, 1000);
 
         return () => clearTimeout(timer);
     }, [timeLeft]);
 
-    // Fungsi untuk format angka (01, 02, etc.)
     const formatTime = (time) => time.toString().padStart(2, '0');
 
     return (
@@ -51,10 +48,10 @@ export default function CartPage() {
                 <div className="w-24 h-1 bg-[#C8705C] mx-auto mt-4"></div>
             </div>
 
-            {/* PERUBAHAN DI SINI: Countdown Timer Section */}
             <div className="bg-[#3F3F3F] text-white p-6 rounded-2xl mb-12 text-center">
-                <h3 className="text-lg font-medium">Don't miss out on these deals!</h3>
-                <p className="font-light text-sm mt-1">Prices will change when the clock runs out, shop now before it's too late.</p>
+                {/* PERBAIKAN DI SINI */}
+                <h3 className="text-lg font-medium">Don&apos;t miss out on these deals!</h3>
+                <p className="font-light text-sm mt-1">Prices will change when the clock runs out, shop now before it&apos;s too late.</p>
                 <div className="flex justify-center items-center space-x-4 mt-4 text-3xl font-medium">
                     <div>{formatTime(timeLeft.hours)}</div>
                     <div>:</div>
@@ -92,7 +89,6 @@ export default function CartPage() {
                     <div>
                         <h2 className="text-2xl font-medium text-[#3F3F3F] mb-4">Logged in As</h2>
                         <div className="bg-[#F2F2F2] p-6 rounded-lg">
-                           {/* 5. Tampilkan data pengguna dinamis */}
                            {isAuthenticated && user ? (
                              <>
                                 <div className="mb-4">
@@ -126,7 +122,7 @@ export default function CartPage() {
                             href="#" 
                             variant="primary" 
                             className="w-full h-16 text-xl rounded-[40px] flex items-center justify-center"
-                            disabled={!isAuthenticated || cartItems.length === 0} // Disable jika belum login atau keranjang kosong
+                            disabled={!isAuthenticated || cartItems.length === 0}
                         >
                             Pay with PayPal
                         </Button>
