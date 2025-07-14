@@ -1,7 +1,7 @@
+// src/components/AuthForm.js
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-// 1. Import ikon untuk show/hide password
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export default function AuthForm() {
@@ -21,7 +21,7 @@ export default function AuthForm() {
   const [regConfirm, setRegConfirm] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
 
-  // 2. State untuk visibilitas password
+  // State untuk visibilitas password
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
@@ -97,13 +97,17 @@ export default function AuthForm() {
                       {isConfirmPasswordVisible ? <EyeSlashIcon className="h-5 w-5"/> : <EyeIcon className="h-5 w-5"/>}
                     </button>
                   </div>
-                  <div className="flex items-center w-full my-4">
-                    <input type="checkbox" id="terms1" className="peer hidden" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} />
-                    <label htmlFor="terms1" className="flex items-center cursor-pointer">
-                      <span className="w-4 h-4 inline-block mr-2 border border-gray-400 rounded-sm peer-checked:bg-[#C8705C] peer-checked:border-[#C8705C] flex items-center justify-center transition-colors">
-                        {agreeTerms && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                      </span>
-                      <span className="text-xs text-gray-500 font-light">I agree to the Terms of Service and Privacy Policy.</span>
+                   {/* PERUBAHAN DI SINI: Checkbox default */}
+                  <div className="flex items-center w-full my-4 text-left">
+                    <input 
+                      type="checkbox" 
+                      id="terms1" 
+                      className="h-4 w-4 mr-2"
+                      checked={agreeTerms} 
+                      onChange={(e) => setAgreeTerms(e.target.checked)} 
+                    />
+                    <label htmlFor="terms1" className="text-xs text-gray-500 font-light cursor-pointer">
+                      I agree to the Terms of Service and Privacy Policy.
                     </label>
                   </div>
                   <button type="submit" disabled={!agreeTerms} className={formButtonStyle}>Register</button>
@@ -145,13 +149,17 @@ export default function AuthForm() {
                       {isConfirmPasswordVisible ? <EyeSlashIcon className="h-5 w-5"/> : <EyeIcon className="h-5 w-5"/>}
                     </button>
                   </div>
-                  <div className="flex items-center w-full my-4">
-                    <input type="checkbox" id="terms2" className="peer hidden" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} />
-                    <label htmlFor="terms2" className="flex items-center cursor-pointer">
-                      <span className="w-4 h-4 inline-block mr-2 border border-gray-400 rounded-sm peer-checked:bg-[#C8705C] peer-checked:border-[#C8705C] flex items-center justify-center transition-colors">
-                        {agreeTerms && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                      </span>
-                      <span className="text-xs text-gray-500 font-light">I agree to the Terms of Service and Privacy Policy.</span>
+                  {/* PERUBAHAN DI SINI: Checkbox default */}
+                  <div className="flex items-center w-full my-4 text-left">
+                     <input 
+                      type="checkbox" 
+                      id="terms2" 
+                      className="h-4 w-4 mr-2"
+                      checked={agreeTerms} 
+                      onChange={(e) => setAgreeTerms(e.target.checked)} 
+                    />
+                    <label htmlFor="terms2" className="text-xs text-gray-500 font-light cursor-pointer">
+                      I agree to the Terms of Service and Privacy Policy.
                     </label>
                   </div>
                   <button type="submit" disabled={!agreeTerms} className={formButtonStyle}>Register</button>

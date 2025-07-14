@@ -84,9 +84,25 @@ export default function ProductDetailPage({ params }) {
             {fontData.licenses && (
               <LicenseSelector
                 licenses={fontData.licenses}
-                product={fontData} // Pastikan hanya prop ini yang dikirim
+                product={fontData}
               />
             )}
+
+            {/* PERUBAHAN DI SINI: Kartu Penawaran Kustom */}
+            <div className="mt-6 border border-dashed border-[#C8705C] rounded-2xl p-6 text-center">
+                <h3 className="text-lg font-medium text-[#3F3F3F]">Need a custom font or license?</h3>
+                <p className="text-sm font-light text-gray-500 mt-2">
+                    Contact us and we will be happy to help you with your custom license needs.
+                </p>
+                <Button 
+                    href="/contact" 
+                    variant="secondary" 
+                    className="mt-4 w-full h-12 text-sm flex items-center justify-center rounded-full"
+                >
+                    Contact Us
+                </Button>
+            </div>
+
             <ProductSidebar
               fileTypes={fontData.fileTypes}
               fileSize={fontData.fileSize}
