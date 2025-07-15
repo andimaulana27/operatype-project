@@ -1,47 +1,24 @@
-// src/app/partners/page.js
+// src/app/(main)/partners/page.js
+import { supabase } from '@/lib/supabaseClient'; // Impor konektor Supabase
 import PartnerCard from '@/components/PartnerCard';
 
-// Data contoh untuk partner, nanti bisa diambil dari database
-const partners = [
-  { 
-    name: 'Brand Partner Name', 
-    slug: 'brand-partner-name', 
-    description: 'A brief description about this partner foundry and the style of fonts they create.',
-    imageUrl: '/partner-logos/partner-1.png' // Pastikan path ini benar dan filenya ada
-  },
-  { 
-    name: 'Foundry B', 
-    slug: 'foundry-b', 
-    description: 'Specializing in modern and minimalist sans-serif fonts for branding projects.',
-    imageUrl: '/partner-logos/partner-2.png' 
-  },
-  { 
-    name: 'Collaborator C', 
-    slug: 'collaborator-c', 
-    description: 'Handcrafted script and signature fonts with a personal, elegant touch.',
-    imageUrl: '/partner-logos/partner-3.png'
-  },
-  { 
-    name: 'Designer D', 
-    slug: 'designer-d', 
-    description: 'Experimental and unique display fonts for headlines and posters.',
-    imageUrl: '/partner-logos/partner-3.png'
-  },
-    { 
-    name: 'Studio E', 
-    slug: 'studio-e', 
-    description: 'A brief description about this partner foundry and the style of fonts they create.',
-    imageUrl: '/partner-logos/partner-1.png'
-  },
-  { 
-    name: 'Artisan Fonts F', 
-    slug: 'artisan-fonts-f', 
-    description: 'Specializing in modern and minimalist sans-serif fonts for branding projects.',
-    imageUrl: '/partner-logos/partner-2.png' 
-  },
-];
+// Fungsi untuk mengambil data partners dari Supabase
+async function getPartners() {
+  const { data, error } = await supabase
+    .from('partners')
+    .select('*')
+    .order('name', { ascending: true });
 
-export default function PartnersPage() {
+  if (error) {
+    console.error('Error fetching partners:', error);
+    return [];
+  }
+  return data;
+}
+
+export default async function PartnersPage() {
+  const partners = await getPartners(); // Ambil data dari database
+
   return (
     <div className="bg-[#f9f9f9]">
       <div className="container mx-auto max-w-[1748px] px-6 py-16">
@@ -54,11 +31,11 @@ export default function PartnersPage() {
           </p>
         </div>
 
-        {/* Grid untuk menampilkan semua PartnerCard */}
+        {/* Grid untuk menampilkan semua PartnerCard secara dinamis */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {partners.map(partner => (
             <PartnerCard 
-              key={partner.slug}
+              key={partner.id} // Gunakan id dari database
               name={partner.name}
               description={partner.description}
               imageUrl={partner.imageUrl}

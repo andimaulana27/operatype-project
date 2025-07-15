@@ -1,44 +1,46 @@
-// src/app/page.js
-"use client";
-
+// src/app/(main)/page.js
+import { supabase } from '@/lib/supabaseClient'; 
 import Button from "@/components/Button";
 import Image from "next/image";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules'; 
 import ProductCard from "@/components/ProductCard";
 import StyleCard from "@/components/StyleCard";
 import ChecklistIcon from "@/components/icons/ChecklistIcon";
+import HeroCarousel from '@/components/HeroCarousel'; // Impor komponen baru kita
 
-// Impor CSS Swiper
-import 'swiper/css';
-import 'swiper/css/navigation';
+// Fungsi untuk mengambil data font dari Supabase
+async function getFonts(limit = 8) {
+  const { data, error } = await supabase
+    .from('fonts')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
 
-export default function Home() {
-  const carouselImages = [
-    '/hero-carousel/slide-1.jpg',
-    '/hero-carousel/slide-2.jpg',
-    '/hero-carousel/slide-3.jpg',
-    '/hero-carousel/slide-4.jpg',
-  ];
+  if (error) {
+    console.error('Error fetching fonts:', error);
+    return [];
+  }
+  return data;
+}
 
-  const featuredFonts = [
-    { name: 'Battesa Royales', desc: 'A Modern Handwritten Script', price: '$15.00' },
-    { name: 'Pullwist', desc: 'A Modern Handwritten Script', price: '$15.00' },
-    { name: 'Santuary Portrait', desc: 'A Modern Handwritten Script', price: '$15.00' },
-    { name: 'Flower Blossom', desc: 'A Beautiful Handwritten Font', price: '$15.00' },
-    { name: 'Aetheria', desc: 'A Dreamy & Ethereal Script', price: '$19.00' },
-    { name: 'Cobalt Bold', desc: 'A Strong Display Sans', price: '$22.00' },
-    { name: 'Paperheart', desc: 'A Delicate Handwritten Note Font', price: '$15.00' },
-    { name: 'Solstice', desc: 'A Warm and Friendly Script', price: '$18.00' },
-  ];
+// Fungsi untuk mengambil font dengan tag 'Bestseller'
+async function getCuratedFonts() {
+    const { data, error } = await supabase
+    .from('fonts')
+    .select('*')
+    .eq('tag', 'Bestseller') 
+    .limit(4);
 
-  const curatedFonts = [
-    { name: 'Royales Horizon', desc: 'Elegant Handwritten Script', price: '$15.00', tag: 'Bestseller' },
-    { name: 'Grande Amstera', desc: 'A New Modern Elegant Script', price: '$15.00', tag: 'Bestseller' },
-    { name: 'Romantic Essentials', desc: 'A Beautiful Handwritten Font', price: '$15.00', tag: 'Bestseller' },
-    { name: 'Brookside Pasture', desc: 'A Beautiful Handwritten Font', price: '$15.00', tag: 'Bestseller' },
-  ];
+  if (error) {
+    console.error('Error fetching curated fonts:', error);
+    return [];
+  }
+  return data;
+}
 
+export default async function Home() {
+  const featuredFonts = await getFonts(8);
+  const curatedFonts = await getCuratedFonts();
+  
   const styleCategories = [
     { title: 'Elegant & Wedding', href: '/fonts?category=elegant', imageUrl: '/styles/style-elegant.jpg' },
     { title: 'Casual & Handwritten', href: '/fonts?category=casual', imageUrl: '/styles/style-casual.jpg' },
@@ -74,32 +76,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HERO SECTION - CAROUSEL */}
-      <section className="w-full mt-16 h-[605px]">
-        <Swiper
-          // PERUBAHAN DI SINI: 'Navigation' dihapus dari modules
-          modules={[Autoplay]} 
-          loop={true}
-          autoplay={{
-            delay: 4000,
-            disableOnInteraction: false,
-          }}
-          className="w-full h-full"
-          // PERUBAHAN DI SINI: Properti 'navigation' dihapus
-        >
-          {carouselImages.map((src, index) => (
-            <SwiperSlide key={index}>
-              <Image
-                src={src}
-                alt={`Hero slide ${index + 1}`}
-                fill
-                style={{ objectFit: 'cover' }}
-                priority={index === 0}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section>
+      {/* HERO SECTION - CAROUSEL (Sekarang menggunakan komponen terpisah) */}
+      <HeroCarousel />
 
       {/* FEATURED COLLECTION SECTION */}
       <section className="w-full bg-[#F2F2F2] py-20">
@@ -114,11 +92,12 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 place-items-center">
             {featuredFonts.map((font) => (
               <ProductCard 
-                key={font.name}
+                key={font.id}
                 fontName={font.name}
                 description={font.desc}
                 price={font.price}
-                imageUrl={null}
+                imageUrl={font.imageUrl}
+                slug={font.slug}
               />
             ))}
           </div>
@@ -143,11 +122,12 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 place-items-center">
             {curatedFonts.map((font) => (
               <ProductCard 
-                key={font.name}
+                key={font.id}
                 fontName={font.name}
                 description={font.desc}
                 price={font.price}
-                imageUrl={null}
+                imageUrl={font.imageUrl}
+                slug={font.slug}
                 tagText={font.tag}
               />
             ))}
@@ -209,7 +189,6 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* === KODE TOMBOL FINAL SESUAI PERMINTAAN ANDA === */}
               <div className="mt-10 flex gap-x-2">
                 <Button href="/license" variant="primary" className="w-[250px] h-[48px] text-[16px] flex items-center justify-center">
                   Explore All Licenses
@@ -222,7 +201,7 @@ export default function Home() {
             </div>
             <div>
               <Image 
-                src="/license-composite.jpg" // Ganti nama file jika perlu
+                src="/license-composite.jpg"
                 alt="License mockup collage" 
                 width={809} 
                 height={535} 

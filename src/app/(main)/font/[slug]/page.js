@@ -1,5 +1,6 @@
 // src/app/(main)/font/[slug]/page.js
-"use client"; 
+import { supabase } from '@/lib/supabaseClient'; // Impor konektor Supabase
+import { notFound } from 'next/navigation';
 
 import Image from "next/image";
 import ProductCard from "@/components/ProductCard";
@@ -10,26 +11,43 @@ import ProductSidebar from "@/components/ProductSidebar";
 import GlyphGrid from "@/components/GlyphGrid";
 import Button from "@/components/Button";
 
-// DATA CONTOH
-const fontData = {
-  name: 'Grande Amstera',
+// --- DATA CONTOH SEKARANG DIAMBIL DARI DATABASE ---
+
+// Fungsi untuk mengambil data satu font berdasarkan slug
+async function getFontBySlug(slug) {
+  const { data, error } = await supabase
+    .from('fonts')
+    .select('*')
+    .eq('slug', slug) // Cari baris yang slug-nya cocok
+    .single(); // Ambil hanya satu hasil
+
+  if (error && error.code !== 'PGRST116') { // Abaikan error 'PGRST116' (no rows found)
+    console.error('Error fetching font:', error);
+  }
+
+  if (!data) {
+    notFound(); // Jika tidak ada data, tampilkan halaman 404
+  }
+
+  return data;
+}
+
+// Data dummy untuk lisensi & info lainnya (nanti bisa dipindah ke database juga)
+const staticFontDetails = {
   author: 'operatype.co',
   mainImage: '/product-previews/grande-amstera-main.jpg',
   galleryImages: [
     '/product-previews/thumb-1.jpg', '/product-previews/thumb-2.jpg', '/product-previews/thumb-3.jpg', 
     '/product-previews/thumb-4.jpg', '/product-previews/thumb-5.jpg', '/product-previews/thumb-6.jpg',
-    '/product-previews/thumb-1.jpg', '/product-previews/thumb-2.jpg', '/product-previews/thumb-3.jpg',
-    '/product-previews/thumb-4.jpg', '/product-previews/thumb-5.jpg', '/product-previews/thumb-6.jpg',
-    '/product-previews/thumb-1.jpg', '/product-previews/thumb-2.jpg', '/product-previews/thumb-3.jpg',
   ],
   licenses: {
     desktop: { price: 19.00 },
     business: { price: 99.00 },
     corporate: { price: 299.00 },
   },
-  fileTypes: "Grande Amstera OTF, TTF, WOFF",
+  fileTypes: "OTF, TTF, WOFF",
   fileSize: "612.35 KB",
-  about: "Grande Amstera - A New Modern Elegant Script Font, from Operatype, perfect for any project like: logos, branding projects, homewares designs, product packaging, mugs, quotes, posters, shopping bags, t-shirts, book covers, business cards, invitation cards, greeting cards, labels, photography, watermarks, special events and all your other luxury projects that require a premium taste.",
+  about: "A New Modern Elegant Script Font, from Operatype, perfect for any project like: logos, branding projects, homewares designs, product packaging, mugs, quotes, posters, shopping bags, t-shirts, book covers, business cards, invitation cards, greeting cards, labels, photography, watermarks, special events and all your other luxury projects that require a premium taste.",
   glyphs: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()".split(''),
   productInfo: {
     features: ["Uppercase & Lowercase", "Number & Punctuation", "Multilingual Support", "Ligatures, Alternates & Swashes", "PUA Encoded"],
@@ -45,11 +63,15 @@ const similarFonts = [
     { name: 'Brookside Pasture', slug: 'brookside-pasture', description: 'A Beautiful Handwritten Font', price: '$15.00', imageUrl: '/placeholder-image.jpg' },
 ];
 
+// Ubah komponen menjadi 'async'
+export default async function ProductDetailPage({ params }) {
+  const fontData = await getFontBySlug(params.slug);
 
-export default function ProductDetailPage({ params }) {
-  if (!fontData) {
-    return <div>Font not found</div>;
-  }
+  // Gabungkan data dinamis dari Supabase dengan data statis untuk detail lainnya
+  const displayData = {
+    ...staticFontDetails, // Ambil detail statis
+    ...fontData,          // Timpa dengan data dinamis (nama, desc, dll)
+  };
 
   return (
     <div className="bg-[#f9f9f9]">
@@ -58,37 +80,36 @@ export default function ProductDetailPage({ params }) {
 
           {/* Kolom Kiri */}
           <div className="lg:col-span-2 flex flex-col">
-            <ImageGallery mainImage={fontData.mainImage} galleryImages={fontData.galleryImages} />
+            <ImageGallery mainImage={displayData.mainImage} galleryImages={displayData.galleryImages} />
             <TypeTester />
             <div className="mt-16">
               <h2 className="text-xl font-medium text-[#3F3F3F]">About The Product</h2>
               <div className="w-[103px] h-1 bg-[#C8705C] my-4"></div>
-              <p className="text-gray-600 font-light leading-relaxed">{fontData.about}</p>
+              <p className="text-gray-600 font-light leading-relaxed">{displayData.about}</p>
             </div>
             <div className="mt-16">
               <h2 className="text-xl font-medium text-[#3F3F3F]">Glyph</h2>
               <div className="w-[103px] h-1 bg-[#C8705C] my-4"></div>
-              <GlyphGrid characters={fontData.glyphs} />
+              <GlyphGrid characters={displayData.glyphs} />
             </div>
           </div>
 
           {/* Kolom Kanan (Sidebar) */}
           <div className="sticky top-28 h-fit">
-            <h1 className="text-4xl font-medium text-[#3F3F3F]">{fontData.name}</h1>
+            <h1 className="text-4xl font-medium text-[#3F3F3F]">{displayData.name}</h1>
             <div className="mt-4">
               <span className="bg-[#C8705C] text-white text-[14px] font-light w-[134px] h-[27px] flex items-center justify-center rounded-full">
-                by {fontData.author}
+                by {displayData.author}
               </span>
             </div>
             <div className="my-6 h-px bg-gray-300"></div>
-            {fontData.licenses && (
+            {displayData.licenses && (
               <LicenseSelector
-                licenses={fontData.licenses}
-                product={fontData}
+                licenses={displayData.licenses}
+                product={displayData}
               />
             )}
 
-            {/* PERUBAHAN DI SINI: Kartu Penawaran Kustom */}
             <div className="mt-6 border border-dashed border-[#C8705C] rounded-2xl p-6 text-center">
                 <h3 className="text-lg font-medium text-[#3F3F3F]">Need a custom font or license?</h3>
                 <p className="text-sm font-light text-gray-500 mt-2">
@@ -104,11 +125,11 @@ export default function ProductDetailPage({ params }) {
             </div>
 
             <ProductSidebar
-              fileTypes={fontData.fileTypes}
-              fileSize={fontData.fileSize}
-              features={fontData.productInfo.features}
-              styles={fontData.productInfo.styles}
-              tags={fontData.productInfo.tags}
+              fileTypes={displayData.fileTypes}
+              fileSize={displayData.fileSize}
+              features={displayData.productInfo.features}
+              styles={displayData.productInfo.styles}
+              tags={displayData.productInfo.tags}
             />
           </div>
         </div>

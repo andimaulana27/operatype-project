@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link'; // Import Link
 
 export default function AuthForm() {
   const { login, register } = useAuth();
@@ -78,7 +79,10 @@ export default function AuthForm() {
                       {isPasswordVisible ? <EyeSlashIcon className="h-5 w-5"/> : <EyeIcon className="h-5 w-5"/>}
                     </button>
                   </div>
-                  <a href="#" className="text-xs text-gray-500 my-5 block hover:underline font-light">Forgot Password?</a>
+                  {/* PERUBAHAN DI SINI */}
+                  <Link href="/forgot-password" legacyBehavior>
+                    <a className="text-xs text-gray-500 my-5 block hover:underline font-light">Forgot Password?</a>
+                  </Link>
                   <button type="submit" className={formButtonStyle}>Login</button>
                 </>
               ) : (
@@ -97,7 +101,6 @@ export default function AuthForm() {
                       {isConfirmPasswordVisible ? <EyeSlashIcon className="h-5 w-5"/> : <EyeIcon className="h-5 w-5"/>}
                     </button>
                   </div>
-                   {/* PERUBAHAN DI SINI: Checkbox default */}
                   <div className="flex items-center w-full my-4 text-left">
                     <input 
                       type="checkbox" 
@@ -130,7 +133,10 @@ export default function AuthForm() {
                       {isPasswordVisible ? <EyeSlashIcon className="h-5 w-5"/> : <EyeIcon className="h-5 w-5"/>}
                     </button>
                   </div>
-                  <a href="#" className="text-xs text-gray-500 my-5 block hover:underline font-light">Forgot Password?</a>
+                  {/* PERUBAHAN DI SINI */}
+                  <Link href="/forgot-password" legacyBehavior>
+                    <a className="text-xs text-gray-500 my-5 block hover:underline font-light">Forgot Password?</a>
+                  </Link>
                   <button type="submit" className={formButtonStyle}>Login</button>
                 </>
               ) : (
@@ -149,7 +155,6 @@ export default function AuthForm() {
                       {isConfirmPasswordVisible ? <EyeSlashIcon className="h-5 w-5"/> : <EyeIcon className="h-5 w-5"/>}
                     </button>
                   </div>
-                  {/* PERUBAHAN DI SINI: Checkbox default */}
                   <div className="flex items-center w-full my-4 text-left">
                      <input 
                       type="checkbox" 
