@@ -3,105 +3,101 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-// Definisikan email admin di satu tempat
-const ADMIN_EMAIL = "andi.maulana.dev@example.com";
+import { createClient } from '@/lib/supabase/client';
 
 const AuthContext = createContext();
 
-const getInitialState = (key, defaultValue) => {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem(key);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        return defaultValue;
-      }
-    }
-  }
-  return defaultValue;
-};
-
 export const AuthProvider = ({ children }) => {
-  const [users, setUsers] = useState(() => getInitialState('users_db', [{
-    name: 'Andi Maulana',
-    email: ADMIN_EMAIL, // Gunakan konstanta
-    password: 'password123',
-  }]));
-  
-  const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false); // State baru untuk status admin
-  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
   const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // --- PERUBAHAN DI SINI ---
+  // Menggunakan email admin asli Anda
+  const ADMIN_EMAIL = "andimaula1227@gmail.com"; 
+  // -------------------------
 
   useEffect(() => {
-    const storedUser = getInitialState('current_user', null);
-    if (storedUser) {
-      setUser(storedUser);
-      // Langsung cek apakah user yang login adalah admin
-      if (storedUser.email === ADMIN_EMAIL) {
-        setIsAdmin(true);
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setUser(session.user);
+        setIsAdmin(session.user.email === ADMIN_EMAIL);
       }
-    }
-    setLoading(false);
-  }, []);
+      setLoading(false);
+    };
 
-  const login = (email, password) => {
-    const foundUser = users.find(u => u.email === email);
-    if (foundUser && foundUser.password === password) {
-      setUser(foundUser);
-      // Cek dan set status admin saat login
-      if (foundUser.email === ADMIN_EMAIL) {
-        setIsAdmin(true);
-      }
-      // Arahkan ke dashboard jika admin, jika tidak ke halaman akun
-      if (foundUser.email === ADMIN_EMAIL) {
-        router.push('/dashboard');
-      } else {
-        router.push('/account');
-      }
-    } else {
-      alert('Invalid email or password.');
-    }
-  };
+    getSession();
 
-  const logout = () => {
-    setUser(null);
-    setIsAdmin(false); // Reset status admin saat logout
-    localStorage.removeItem('current_user');
-    router.push('/login');
-  };
-  
-  // Update useEffect untuk menyimpan user ke localStorage
-  useEffect(() => {
-    if (!loading) {
-      if (user) {
-        localStorage.setItem('current_user', JSON.stringify(user));
-      } else {
-        localStorage.removeItem('current_user');
-      }
-    }
-  }, [user, loading]);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setIsAdmin(session?.user?.email === ADMIN_EMAIL);
+      if (!loading) setLoading(false);
+    });
 
-  // Fungsi register tidak perlu diubah
-  const register = (name, email, password) => {
-    if (users.some(u => u.email === email)) {
-      alert('An account with this email already exists.');
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, [supabase, ADMIN_EMAIL, loading]);
+
+
+  const login = async (email, password) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      alert(`Login failed: ${error.message}`);
       return;
     }
-    const newUser = { name, email, password };
-    setUsers(prevUsers => [...prevUsers, newUser]);
-    setUser(newUser);
-    setIsAdmin(false); // Pastikan user baru bukan admin
-    router.push('/account'); 
+    if (email === ADMIN_EMAIL) {
+      router.push('/dashboard');
+    } else {
+      router.push('/account');
+    }
   };
 
-  const isAuthenticated = !!user;
+  const register = async (name, email, password) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+        }
+      }
+    });
+
+    if (error) {
+      alert(`Registration failed: ${error.message}`);
+      return;
+    }
+    
+    router.push('/account');
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setIsAdmin(false);
+    router.push('/login');
+  };
+
+  const value = {
+    user: user ? {
+      ...user,
+      name: user.user_metadata?.full_name || user.email 
+    } : null,
+    isAuthenticated: !!user,
+    isAdmin,
+    loading,
+    login,
+    register,
+    logout,
+  };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isAdmin, loading, login, register, logout }}>
-      {children}
+    <AuthContext.Provider value={value}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
