@@ -1,11 +1,16 @@
 // src/app/(admin)/dashboard/partners/page.js
 import { supabase } from '@/lib/supabaseClient';
-import Link from 'next/link'; // Pastikan Link diimpor
+import Link from 'next/link';
 import DeletePartnerButton from '@/components/DeletePartnerButton';
+import { PencilIcon } from '@heroicons/react/24/outline';
 
+// PERUBAHAN 1: Query diperbarui untuk mengambil jumlah font
 async function getPartners() {
-    // ... (fungsi ini tidak berubah)
-    const { data, error } = await supabase.from('partners').select('*').order('name', { ascending: true });
+    const { data, error } = await supabase
+        .from('partners')
+        .select('*, fonts(count)') // Ambil semua data partner DAN jumlah font terkait
+        .order('name', { ascending: true });
+        
     if (error) { console.error('Error fetching partners:', error); return []; }
     return data;
 }
@@ -21,11 +26,9 @@ export default async function ManagePartnersPage({ searchParams }) {
                     <h1 className="text-3xl font-bold text-gray-800">Manage Partners</h1>
                     <div className="w-24 h-1 bg-[#C8705C] mt-2"></div>
                 </div>
-                {/* --- PERUBAHAN DI SINI --- */}
                 <Link href="/dashboard/partners/new" className="bg-[#C8705C] text-white px-4 py-2 rounded-md hover:bg-opacity-90">
                     Add New Partner
                 </Link>
-                {/* ------------------------- */}
             </div>
 
             {message && (
@@ -40,6 +43,8 @@ export default async function ManagePartnersPage({ searchParams }) {
                         <tr>
                             <th className="p-4 text-sm font-semibold text-gray-600">Partner Name</th>
                             <th className="p-4 text-sm font-semibold text-gray-600">Description</th>
+                            {/* PERUBAHAN 2: Tambah kolom baru */}
+                            <th className="p-4 text-sm font-semibold text-gray-600 text-center">Font Count</th>
                             <th className="p-4 text-sm font-semibold text-gray-600">Actions</th>
                         </tr>
                     </thead>
@@ -48,9 +53,19 @@ export default async function ManagePartnersPage({ searchParams }) {
                             <tr key={partner.id} className="border-b hover:bg-gray-50">
                                 <td className="p-4 text-[#3F3F3F] font-medium">{partner.name}</td>
                                 <td className="p-4 text-[#3F3F3F] truncate max-w-sm">{partner.description}</td>
-                                <td className="p-4 space-x-2">
-                                    <button className="text-sm text-blue-600 hover:underline">Edit</button>
-                                    <DeletePartnerButton partnerId={partner.id} />
+                                {/* PERUBAHAN 3: Tampilkan jumlah font */}
+                                <td className="p-4 text-[#3F3F3F] text-center">
+                                    {partner.fonts[0]?.count || 0}
+                                </td>
+                                <td className="p-4">
+                                    <div className="flex items-center gap-4">
+                                        {/* PERUBAHAN 4: Ubah warna tombol Edit */}
+                                        <button className="flex items-center gap-1 text-sm text-[#C8705C] hover:underline">
+                                            <PencilIcon className="w-4 h-4"/>
+                                            Edit
+                                        </button>
+                                        <DeletePartnerButton partnerId={partner.id} />
+                                    </div>
                                 </td>
                             </tr>
                         ))}

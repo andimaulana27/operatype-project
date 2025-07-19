@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Button from './Button';
 
-const GlyphGrid = ({ characters }) => {
+// Terima props baru: fontFamily
+const GlyphGrid = ({ characters, fontFamily }) => { 
   const [showAll, setShowAll] = useState(false);
   const displayedChars = showAll ? characters : characters.slice(0, 48);
 
@@ -14,7 +15,8 @@ const GlyphGrid = ({ characters }) => {
           {displayedChars.map((char, index) => (
             <div 
               key={index} 
-              // PERBAIKAN DI SINI: Mengubah bg-gray-50 menjadi bg-transparent
+              // Terapkan font style dinamis di sini
+              style={{ fontFamily: fontFamily }} 
               className="flex items-center justify-center w-full aspect-square border border-gray-300 rounded-lg bg-transparent text-3xl text-[#3F3F3F] select-all"
             >
               {char}
@@ -22,7 +24,7 @@ const GlyphGrid = ({ characters }) => {
           ))}
         </div>
         {!showAll && characters.length > 48 && (
-          <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-[#f9f9f9] to-transparent pointer-events-none"></div>
         )}
       </div>
       
