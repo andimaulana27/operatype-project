@@ -7,7 +7,10 @@ export const createClient = () => {
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    // === PERUBAHAN KRUSIAL DI SINI ===
+    // Menggunakan Service Role Key untuk operasi server
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    // =================================
     {
       cookies: {
         get(name) {
@@ -18,8 +21,6 @@ export const createClient = () => {
             cookieStore.set({ name, value, ...options })
           } catch (error) {
             // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
           }
         },
         remove(name, options) {
@@ -27,8 +28,6 @@ export const createClient = () => {
             cookieStore.set({ name, value: '', ...options })
           } catch (error) {
             // The `remove` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
           }
         },
       },

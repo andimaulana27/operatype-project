@@ -30,7 +30,7 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
             // Hapus query param dari URL tanpa reload
             router.replace('/dashboard/fonts', { scroll: false });
         }
-    }, []);
+    }, [searchParams, router]);
 
     const showNotification = (message, isError = false) => {
         setNotification({ message, isError, show: true });
@@ -61,7 +61,7 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
             {isModalOpen && (
                 <DiscountModal 
                     discounts={discounts}
-                    selectedFonts={selectedFonts}
+                    selectedFonts={Array.from(selectedFonts)}
                     onClose={() => setIsModalOpen(false)}
                     showNotification={showNotification}
                 />
@@ -70,7 +70,7 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
             {/* Tampilkan notifikasi jika show true */}
             {notification.show && (
                  <div className={`fixed top-5 right-5 z-50 p-4 rounded-lg shadow-lg ${notification.isError ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
-                    {notification.message}
+                    {decodeURIComponent(notification.message.replace(/\+/g, ' '))}
                 </div>
             )}
             
@@ -79,7 +79,7 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
                     <h1 className="text-3xl font-bold text-gray-800">Manage Fonts</h1>
                     <div className="w-24 h-1 bg-[#C8705C] mt-2"></div>
                 </div>
-                {/* Tombol "Apply Discount" akan muncul di sini */}
+                {/* Tombol "Apply Discount" dan "Add New Font" */}
                 <div className="flex items-center gap-4">
                     {selectedFonts.size > 0 && (
                         <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 bg-[#3F3F3F] text-white px-4 py-2 rounded-md hover:bg-opacity-90">
@@ -97,6 +97,7 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
                     <thead className="border-b">
                         <tr>
                             <th className="p-4 w-12"><input type="checkbox" onChange={handleSelectAll} checked={selectedFonts.size === fonts.length && fonts.length > 0} /></th>
+                            {/* === PERUBAHAN DI SINI: Menambahkan Kolom Gambar === */}
                             <th className="p-4 text-sm font-semibold text-gray-600">Image</th>
                             <th className="p-4 text-sm font-semibold text-gray-600">Name / Discount</th>
                             <th className="p-4 text-sm font-semibold text-gray-600">Partner</th>
@@ -109,10 +110,21 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
                         {fonts.map(font => (
                             <tr key={font.id} className="border-b hover:bg-gray-50">
                                 <td className="p-4"><input type="checkbox" checked={selectedFonts.has(font.id)} onChange={(e) => handleSelectOne(font.id, e.target.checked)} /></td>
-                                <td className="p-4"><div className="relative w-24 h-16 bg-gray-100 rounded-md overflow-hidden"><Image src={font.main_image_url || font.imageUrl || '/placeholder-image.jpg'} alt={`Preview for ${font.name}`} fill style={{ objectFit: 'cover' }} /></div></td>
+                                {/* === PERUBAHAN DI SINI: Menampilkan Gambar dari main_image_url === */}
+                                <td className="p-4">
+                                    <div className="relative w-24 h-16 bg-gray-100 rounded-md overflow-hidden">
+                                        <Image 
+                                            src={font.main_image_url || '/placeholder-image.jpg'} 
+                                            alt={`Preview for ${font.name}`} 
+                                            fill 
+                                            sizes="100px"
+                                            style={{ objectFit: 'cover' }} 
+                                        />
+                                    </div>
+                                </td>
                                 <td className="p-4 text-[#3F3F3F] font-medium align-top">
                                     {font.name}
-                                    {font.font_discounts[0]?.discounts && (
+                                    {font.font_discounts && font.font_discounts[0]?.discounts && (
                                         <div className="text-xs font-bold text-green-600 mt-1">
                                             {font.font_discounts[0].discounts.name} ({font.font_discounts[0].discounts.percent_off}%)
                                         </div>
@@ -120,7 +132,7 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
                                 </td>
                                 <td className="p-4 text-[#3F3F3F] align-top">{font.partners ? font.partners.name : <span className="text-gray-400">N/A</span>}</td>
                                 <td className="p-4 text-[#3F3F3F] align-top">
-                                    {font.font_discounts[0]?.discounts ? (
+                                    {font.font_discounts && font.font_discounts[0]?.discounts ? (
                                         <div>
                                             <span className="line-through text-gray-400">${font.price_desktop?.toFixed(2)}</span>
                                             <span className="ml-2 font-bold text-red-600">
@@ -128,7 +140,7 @@ function ManageFontsClient({ initialFonts, initialDiscounts }) {
                                             </span>
                                         </div>
                                     ) : (
-                                        `$${font.price_desktop?.toFixed(2)}`
+                                        `$${font.price_desktop?.toFixed(2) || '0.00'}`
                                     )}
                                 </td>
                                 <td className="p-4 align-top">{font.tag && <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">{font.tag}</span>}</td>
@@ -147,9 +159,11 @@ export default function ManageFontsPage() {
     const [fonts, setFonts] = useState([]);
     const [discounts, setDiscounts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
+            setLoading(true);
             const { data: fontData, error: fontError } = await supabase
                 .from('fonts')
                 .select(`*, partners (name), font_discounts (discounts (*))`)
@@ -160,10 +174,17 @@ export default function ManageFontsPage() {
                 .select('*')
                 .eq('is_active', true);
 
-            if (fontError || discountError) {
-                console.error("Error fetching data:", fontError || discountError);
+            if (fontError) {
+                console.error("Error fetching fonts:", fontError);
+                setError(fontError.message);
             } else {
                 setFonts(fontData);
+            }
+
+            if (discountError) {
+                console.error("Error fetching discounts:", discountError);
+                setError(discountError.message);
+            } else {
                 setDiscounts(discountData);
             }
             setLoading(false);
@@ -172,7 +193,10 @@ export default function ManageFontsPage() {
     }, []);
 
     if (loading) {
-        return <div>Loading data...</div>;
+        return <div className="text-center p-8">Loading data...</div>;
+    }
+    if (error) {
+        return <div className="text-center p-8 text-red-600">Error: {error}</div>;
     }
 
     return <ManageFontsClient initialFonts={fonts} initialDiscounts={discounts} />;

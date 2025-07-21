@@ -1,9 +1,16 @@
+// next.config.mjs
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '50mb',
-    },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'qxiaghvizkasevbqhied.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/font-previews/**',
+      },
+    ],
   },
 };
 

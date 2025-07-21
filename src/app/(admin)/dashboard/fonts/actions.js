@@ -1,9 +1,11 @@
 // src/app/(admin)/dashboard/fonts/actions.js
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+// --- PERBAIKAN DI SINI ---
+import { createClient } from '@/lib/supabase/server'; // Impor fungsi, bukan konstanta
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import opentype from 'opentype.js';
 
 function createSlug(text) {
     if (!text) return '';
@@ -11,9 +13,35 @@ function createSlug(text) {
 }
 
 export async function createFont(formData) {
-    const supabase = createClient();
+    // --- PERBAIKAN DI SINI ---
+    const supabase = createClient() // Panggil fungsi untuk mendapatkan klien Supabase
+
     const fontName = formData.get('name');
     const slug = createSlug(fontName);
+
+    const regularFontFile = formData.get('font_file_regular');
+    let glyphs = '';
+    if (regularFontFile && regularFontFile.size > 0) {
+        try {
+            const fontBuffer = await regularFontFile.arrayBuffer();
+            const font = opentype.parse(fontBuffer);
+            const characterSet = new Set();
+            for (let i = 0; i < font.glyphs.length; i++) {
+                const glyph = font.glyphs.get(i);
+                if (glyph.unicode) {
+                    const char = String.fromCharCode(glyph.unicode);
+                    if (char.trim().length > 0 && char.charCodeAt(0) > 32) {
+                       characterSet.add(char);
+                    }
+                }
+            }
+            glyphs = Array.from(characterSet).sort().join('');
+        } catch (e) {
+            console.error('Error parsing font file:', e);
+            return redirect(`/dashboard/fonts/new?message=Error: Could not parse the provided font file.`);
+        }
+    }
+
     const fontDataObject = {
         name: fontName, slug,
         desc: formData.get('desc'),
@@ -24,25 +52,38 @@ export async function createFont(formData) {
         category: formData.get('category'),
         partner_id: formData.get('partner_id') || null,
         tag: formData.get('tag') || null,
-        glyph_characters: formData.get('glyph_characters'),
+        glyph_characters: glyphs,
     };
+    
     const uploadFile = async (file, folder) => {
         if (!file || file.size === 0) return { publicUrl: null, error: null };
         const filePath = `${folder}/${slug}-${Date.now()}-${file.name}`;
-        const { data, error } = await supabase.storage.from('products').upload(filePath, file, { upsert: true });
-        if (error) return { publicUrl: null, error };
+        const fileBuffer = await file.arrayBuffer(); 
+        const { data, error } = await supabase.storage.from('products').upload(filePath, fileBuffer, { 
+            upsert: true,
+            contentType: file.type
+        });
+
+        if (error) {
+            console.error("Supabase Storage Error:", error);
+            return { publicUrl: null, error };
+        }
+
         const { data: { publicUrl } } = supabase.storage.from('products').getPublicUrl(data.path);
         return { publicUrl, error: null };
     };
+
     const filesToUpload = [
-        { file: formData.get('font_file_regular'), folder: 'font-display', key: 'font_file_url_regular' },
+        { file: regularFontFile, folder: 'font-display', key: 'font_file_url_regular' },
         { file: formData.get('font_file_italic'), folder: 'font-display', key: 'font_file_url_italic' },
         { file: formData.get('font_zip'), folder: 'font-files', key: 'font_zip_url' },
         { file: formData.get('main_image'), folder: 'font-previews', key: 'main_image_url' },
     ];
     for (const item of filesToUpload) {
         const { publicUrl, error } = await uploadFile(item.file, item.folder);
-        if (error) return redirect(`/dashboard/fonts/new?message=Error uploading ${item.file.name}: ${error.message}`);
+        if (error) {
+            return redirect(`/dashboard/fonts/new?message=Error uploading ${item.file.name}: ${error.message}`);
+        }
         if (publicUrl) fontDataObject[item.key] = publicUrl;
         if (item.key === 'main_image_url') fontDataObject.imageUrl = publicUrl;
     }
@@ -58,7 +99,7 @@ export async function createFont(formData) {
     }
     const { data: newFontData, error: insertError } = await supabase.from('fonts').insert(fontDataObject).select().single();
     if (insertError) {
-        return redirect(`/dashboard/fonts/new?message=Error: Could not add font. ${insertError.message}`);
+        return redirect(`/dashboard/fonts/new?message=Error: Could not add font to database. ${insertError.message}`);
     }
     revalidatePath('/dashboard/fonts');
     revalidatePath(`/font/${newFontData.slug}`);
@@ -67,7 +108,7 @@ export async function createFont(formData) {
 }
 
 export async function deleteFont(formData) {
-    const supabase = createClient();
+    const supabase = createClient(); // Panggil juga di sini
     const fontId = formData.get('font_id');
     if (!fontId) return redirect('/dashboard/fonts?message=Error: Font ID is missing.');
     const { data: fontData, error: fetchError } = await supabase.from('fonts').select('slug').eq('id', fontId).single();
@@ -80,9 +121,8 @@ export async function deleteFont(formData) {
     redirect('/dashboard/fonts?message=Font deleted successfully!');
 }
 
-// --- FUNGSI BARU UNTUK MENERAPKAN DISKON ---
 export async function applyDiscountToFonts(formData) {
-    const supabase = createClient();
+    const supabase = createClient(); // Panggil juga di sini
     const fontIds = JSON.parse(formData.get('font_ids'));
     const discountId = formData.get('discount_id');
 
